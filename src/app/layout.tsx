@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Dosis } from 'next/font/google';
 import './styles/globals.css';
+import React from 'react';
 
 const inter = Dosis({ subsets: ['latin'] });
 

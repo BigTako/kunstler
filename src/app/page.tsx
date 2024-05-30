@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React from 'react';
 
 export default function Home() {
   // flex min-h-screen flex-col items-center justify-between p-24

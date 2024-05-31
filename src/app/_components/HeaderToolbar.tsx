@@ -5,7 +5,7 @@ import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage } from 'reac
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { SquareButton } from '@components';
 import { canvasState, toolState } from '@store';
-import { Brush, Rect } from '@tools';
+import { Brush, Circle, Rect } from '@tools';
 import { cn } from '@/utils/cn';
 
 const headerToolbarButtons = [
@@ -31,7 +31,7 @@ const headerToolbarButtons = [
     title: 'Circle shape',
     icon: <BsCircle />,
     selectable: true,
-    onClick: () => {},
+    onClick: () => toolState.setTool(new Circle(canvasState.canvas as HTMLCanvasElement)),
   },
   {
     title: 'Eraser',

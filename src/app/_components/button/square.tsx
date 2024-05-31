@@ -5,10 +5,12 @@ export function SquareButton({
   title,
   className,
   children,
+  onClick,
 }: {
   title?: string;
   className?: string;
   children: ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <button
@@ -17,6 +19,7 @@ export function SquareButton({
         className,
       )}
       title={title}
+      onClick={onClick}
     >
       <div className="text-inherit max-h-full max-w-full">{children}</div>
     </button>

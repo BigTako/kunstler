@@ -1,5 +1,9 @@
+'use client';
+
 import { cn } from '@/utils/cn';
-import React from 'react';
+import React, { useState } from 'react';
+import { BsPalette } from 'react-icons/bs';
+import { SquareButton } from '@components';
 
 function ColorInput({ id, className }: { id: string; className?: string }) {
   return (
@@ -14,9 +18,25 @@ function ColorInput({ id, className }: { id: string; className?: string }) {
   );
 }
 
-export function AsideToolbar() {
+export function MobileAsideToolbar() {
+  const [isToolbarOpened, setIsToolbarOpened] = useState(false);
   return (
-    <aside className="absolute bottom-1/2 left-5 flex flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm">
+    <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm md:hidden">
+      <SquareButton title="Paramters" onClick={() => setIsToolbarOpened(v => !v)}>
+        <BsPalette />
+      </SquareButton>
+      {isToolbarOpened && (
+        <aside className="absolute bottom-20 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm">
+          <Toolbar />
+        </aside>
+      )}
+    </div>
+  );
+}
+function Toolbar({ className }: { className?: string }) {
+  // flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm
+  return (
+    <aside className={cn('flex flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm', className)}>
       <div className="flex justify-between">
         <label htmlFor="color-input" className="inline-flex items-center">
           Stroke color
@@ -36,5 +56,26 @@ export function AsideToolbar() {
         <input type="range" id="lint-width-input" name="lint-width-input" className="cursor-pointer" min="1" max="50" />
       </div>
     </aside>
+  );
+}
+
+export function AsideToolbar() {
+  const [isToolbarOpened, setIsToolbarOpened] = useState(false);
+  return (
+    <>
+      <div className="absolute bottom-1/2 left-5 hidden md:flex">
+        <Toolbar />
+      </div>
+      <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm md:hidden">
+        <SquareButton title="Paramters" onClick={() => setIsToolbarOpened(v => !v)}>
+          <BsPalette />
+        </SquareButton>
+        {isToolbarOpened && (
+          <div className="absolute bottom-20 right-1/2 translate-x-1/2">
+            <Toolbar />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

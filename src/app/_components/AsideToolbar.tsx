@@ -1,11 +1,15 @@
+import { cn } from '@/utils/cn';
 import React from 'react';
 
-function ColorInput({ id }: { id: string }) {
+function ColorInput({ id, className }: { id: string; className?: string }) {
   return (
     <input
       type="color"
       id={id}
-      className="box-border h-[30px] w-[30px] cursor-pointer rounded-md border-none outline outline-1 outline-offset-2 outline-primary-900"
+      className={cn(
+        'box-border h-[30px] w-[30px] cursor-pointer rounded-md border-none outline outline-1 outline-offset-2 outline-primary-900',
+        className,
+      )}
     />
   );
 }

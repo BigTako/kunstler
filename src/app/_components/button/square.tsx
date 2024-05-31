@@ -10,7 +10,7 @@ export function SquareButton({
   title?: string;
   className?: string;
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: () => any;
 }) {
   return (
     <button

@@ -5,7 +5,7 @@ import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage } from 'reac
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { SquareButton } from '@components';
 import { canvasState, toolState } from '@store';
-import { Brush } from '@tools';
+import { Brush, Rect } from '@tools';
 import { cn } from '@/utils/cn';
 
 const headerToolbarButtons = [
@@ -25,7 +25,7 @@ const headerToolbarButtons = [
     title: 'Rect shape',
     icon: <BsApp />,
     selectable: true,
-    onClick: () => {},
+    onClick: () => toolState.setTool(new Rect(canvasState.canvas as HTMLCanvasElement)),
   },
   {
     title: 'Circle shape',
@@ -60,7 +60,7 @@ const headerToolbarButtons = [
 ];
 
 export function HeaderToolbar() {
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('Brush');
   return (
     <header className="absolute right-1/2 top-6 flex translate-x-1/2 gap-3 rounded-lg bg-primary-50 p-1 shadow-sm">
       {headerToolbarButtons.map(({ title, icon, onClick, selectable }) => (

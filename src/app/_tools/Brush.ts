@@ -34,8 +34,9 @@ export class Brush extends Tool {
   }
 
   draw(x: number, y: number) {
-    this.ctx?.lineTo(x, y);
-    this.ctx?.stroke();
-    console.log('drawing');
+    if (this.ctx) {
+      this.ctx.lineTo(x, y);
+      this.ctx.stroke();
+    }
   }
 }

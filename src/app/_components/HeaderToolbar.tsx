@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
-import { SquareButton } from './button';
+import { SquareButton } from '@components';
 
 const headerToolbarButtons = [
   {

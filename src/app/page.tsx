@@ -1,7 +1,5 @@
 import React from 'react';
-import { HeaderToolbar } from './_components/HeaderToolbar';
-import { AsideToolbar } from './_components/AsideToolbar';
-import { Canvas } from './_components/Canvas';
+import { Canvas, AsideToolbar, HeaderToolbar } from '@components';
 
 export default function Home() {
   return (

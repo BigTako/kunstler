@@ -34,7 +34,6 @@ export function MobileAsideToolbar() {
   );
 }
 function Toolbar({ className }: { className?: string }) {
-  // flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm
   return (
     <aside className={cn('flex flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm', className)}>
       <div className="flex justify-between">
@@ -66,7 +65,7 @@ export function AsideToolbar() {
       <div className="absolute bottom-1/2 left-5 hidden md:flex">
         <Toolbar />
       </div>
-      <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm md:hidden">
+      <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-2 shadow-sm md:hidden">
         <SquareButton title="Paramters" onClick={() => setIsToolbarOpened(v => !v)}>
           <BsPalette />
         </SquareButton>

@@ -43,7 +43,7 @@ export function HeaderToolbar() {
   return (
     <header className="absolute right-1/2 top-6 flex translate-x-1/2 gap-3 rounded-lg bg-primary-50 p-1 shadow-sm">
       {headerToolbarButtons.map(button => (
-        <SquareButton key={button.title} title={button.title}>
+        <SquareButton key={button.title} title={button.title} className="md:h-[40px] md:w-[40px]">
           {button.icon}
         </SquareButton>
       ))}

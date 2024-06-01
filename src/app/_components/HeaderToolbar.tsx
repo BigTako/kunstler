@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 
-import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage } from 'react-icons/bs';
+import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { SquareButton } from '@components';
 import { canvasState, toolState } from '@store';
 import { Brush, Circle, Eraser, Rect } from '@tools';
 import { cn } from '@/utils/cn';
+import { Line } from '../_tools/Line';
 
 const headerToolbarButtons = [
   {
@@ -38,6 +39,12 @@ const headerToolbarButtons = [
     icon: <BsEraser />,
     selectable: true,
     onClick: () => toolState.setTool(new Eraser(canvasState.canvas as HTMLCanvasElement)),
+  },
+  {
+    title: 'Line',
+    icon: <BsDashLg />,
+    selectable: true,
+    onClick: () => toolState.setTool(new Line(canvasState.canvas as HTMLCanvasElement)),
   },
   {
     title: 'Add image',

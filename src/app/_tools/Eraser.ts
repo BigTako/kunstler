@@ -1,12 +1,13 @@
 import { Tool } from '@tools';
 
-export class Brush extends Tool {
+export class Eraser extends Tool {
   public mouseDown: boolean;
-
+  private saved: string;
   constructor(canvas: HTMLCanvasElement) {
     super(canvas);
     this.listen();
     this.mouseDown = false;
+    this.saved = '';
   }
 
   listen() {
@@ -35,9 +36,12 @@ export class Brush extends Tool {
 
   draw(x: number, y: number) {
     if (this.ctx) {
-      this.ctx.strokeStyle = 'black';
+      const width = 50;
+      this.ctx.lineWidth = width;
       this.ctx.lineCap = 'round';
       this.ctx.lineJoin = 'round';
+      this.ctx.strokeStyle = '#fafafa';
+      this.ctx.fillStyle = '#fafafa';
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
     }

@@ -2,12 +2,11 @@ import { Tool } from '@tools';
 
 export class Eraser extends Tool {
   public mouseDown: boolean;
-  private saved: string;
+
   constructor(canvas: HTMLCanvasElement) {
     super(canvas);
     this.listen();
     this.mouseDown = false;
-    this.saved = '';
   }
 
   listen() {

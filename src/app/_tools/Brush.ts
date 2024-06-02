@@ -35,7 +35,6 @@ export class Brush extends Tool {
 
   draw(x: number, y: number) {
     if (this.ctx) {
-      this.ctx.strokeStyle = 'black';
       this.ctx.lineCap = 'round';
       this.ctx.lineJoin = 'round';
       this.ctx.lineTo(x, y);

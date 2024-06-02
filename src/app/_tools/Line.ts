@@ -47,15 +47,22 @@ export class Line extends Tool {
     const img = new Image();
     img.src = this.saved;
 
+    // eslint-disable-next-line no-unused-vars
     img.onload = async function (this: Line) {
       if (this.ctx) {
+        const currentLineCap = this.ctx.lineCap;
+        const currentLineJoin = this.ctx.lineJoin;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
         this.ctx.moveTo(this.currentX, this.currentY);
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
         this.ctx.lineTo(x, y);
         this.ctx.stroke();
+        this.ctx.lineCap = currentLineCap;
+        this.ctx.lineJoin = currentLineJoin;
       }
-    }.bind(this as Line);
+    }.bind(this);
   }
 }

@@ -35,14 +35,16 @@ export class Eraser extends Tool {
 
   draw(x: number, y: number) {
     if (this.ctx) {
-      const width = 50;
-      this.ctx.lineWidth = width;
+      const curStrokeColor = this.ctx.strokeStyle;
+      const curFillColor = this.ctx.fillStyle;
       this.ctx.lineCap = 'round';
       this.ctx.lineJoin = 'round';
       this.ctx.strokeStyle = '#fafafa';
       this.ctx.fillStyle = '#fafafa';
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
+      this.ctx.strokeStyle = curStrokeColor;
+      this.ctx.fillStyle = curFillColor;
     }
   }
 }

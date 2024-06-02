@@ -1,4 +1,5 @@
 import { Tool } from '@tools';
+import { canvasState } from '../_store';
 
 export class Rect extends Tool {
   public mouseDown: boolean;
@@ -56,6 +57,12 @@ export class Rect extends Tool {
         this.ctx.rect(x, y, w, h);
         this.ctx.fill();
         this.ctx.stroke();
+        canvasState.pushShape({
+          x,
+          y,
+          width: w,
+          height: h,
+        });
       }
     };
   }

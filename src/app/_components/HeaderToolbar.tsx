@@ -3,12 +3,19 @@ import React, { useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
+import { HiOutlineHand } from 'react-icons/hi';
 import { SquareButton } from '@components';
 import { canvasState, toolState } from '@store';
-import { Brush, Circle, Eraser, Rect, Line, CanvasImage } from '@tools';
+import { Brush, Circle, Eraser, Rect, Line, CanvasImage, ElementMover } from '@tools';
 import { cn } from '@/utils/cn';
 
 const headerToolbarButtons = [
+  {
+    title: 'Move',
+    icon: <HiOutlineHand />,
+    selectable: true,
+    onClick: () => toolState.setTool(new ElementMover(canvasState.canvas as HTMLCanvasElement)),
+  },
   {
     title: 'Brush',
     icon: <BsBrush />,

@@ -71,11 +71,6 @@ export function HeaderToolbar() {
           {icon}
         </SquareButton>
       ))}
-      {/* {headerToolbarButtons.map(button => (
-        <SquareButton key={button.title} title={button.title} className="md:h-[40px] md:w-[40px]">
-          {button.icon}
-        </SquareButton>
-      ))} */}
     </header>
   );
 }

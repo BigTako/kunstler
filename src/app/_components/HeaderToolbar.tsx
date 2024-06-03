@@ -7,7 +7,7 @@ import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
-import { Brush, Circle as CircleTool, Rect as RectTool } from '@tools';
+import { Brush, Circle as CircleTool, Line as LineTool, Rect as RectTool } from '@tools';
 
 const headerToolbarButtons = [
   {
@@ -44,7 +44,7 @@ const headerToolbarButtons = [
     title: 'Line',
     icon: <BsDashLg />,
     selectable: true,
-    onClick: () => {},
+    onClick: () => toolState.setTool(new LineTool()),
   },
   {
     title: 'Add image',

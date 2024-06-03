@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { DrawingFuncType, LineType, Tool } from '@tools';
+import { DrawingFuncType, LineType, ShapeType, Tool } from '@tools';
+import { canvasState } from '../_store';
 
 export class Brush implements Tool {
   lines: LineType[] = [];
@@ -16,11 +17,12 @@ export class Brush implements Tool {
   }
 
   startLine(pos: { x: number; y: number }) {
-    this.lines.push({ type: 'line', points: [pos.x, pos.y] });
+    canvasState.addShape({ type: 'line', points: [pos.x, pos.y] } as ShapeType);
+    // this.lines.push({ type: 'line', points: [pos.x, pos.y] });
   }
 
   addPoint(pos: { x: number; y: number }) {
-    let lastLine = this.lines[this.lines.length - 1];
+    let lastLine = canvasState.last() as LineType;
     lastLine.points = lastLine.points.concat([pos.x, pos.y]);
   }
 

@@ -3,8 +3,7 @@ import React from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Stage, Layer } from 'react-konva';
-import { toolState } from '@store';
-import { Brush } from '@tools';
+import { canvasState, toolState } from '@store';
 
 export const Canvas = observer(function () {
   return (
@@ -15,7 +14,7 @@ export const Canvas = observer(function () {
       onMouseMove={toolState.tool?.onMouseMove}
       onMouseUp={toolState.tool?.onMouseUp}
     >
-      <Layer>{(toolState.tool as Brush)?.lines.map((line, i) => toolState.tool?.draw(line, i))}</Layer>
+      <Layer>{canvasState.shapes.map((shape, i) => toolState.tool?.draw(shape, i))}</Layer>
     </Stage>
   );
 });

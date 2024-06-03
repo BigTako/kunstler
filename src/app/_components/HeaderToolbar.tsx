@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
+import { Line } from 'react-konva';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
 import { Brush } from '@tools';
-import { Line } from 'react-konva';
 
 const headerToolbarButtons = [
   {
@@ -82,6 +82,11 @@ const headerToolbarButtons = [
 
 export function HeaderToolbar() {
   const [selectedOption, setSelectedOption] = useState('Brush');
+
+  useEffect(() => {
+    headerToolbarButtons.find(b => b.title === 'Brush')?.onClick();
+  }, []);
+
   return (
     <header className="absolute right-1/2 top-6 flex translate-x-1/2 gap-3 rounded-lg bg-primary-50 p-1 shadow-sm">
       {headerToolbarButtons.map(({ title, icon, onClick, selectable }) => (

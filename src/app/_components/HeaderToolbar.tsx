@@ -8,61 +8,75 @@ import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
 import { Brush } from '@tools';
+import { Line } from 'react-konva';
 
 const headerToolbarButtons = [
   {
     title: 'Brush',
     icon: <BsBrush />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () =>
+      toolState.setTool(
+        new Brush((shape, id) => (
+          <Line
+            key={id}
+            points={shape.points}
+            stroke="#000"
+            strokeWidth={5}
+            tension={0.5}
+            lineCap="round"
+            lineJoin="round"
+          />
+        )),
+      ),
   },
   {
     title: 'Fill',
     icon: <BsPaintBucket />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Rect shape',
     icon: <BsApp />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Circle shape',
     icon: <BsCircle />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Eraser',
     icon: <BsEraser />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Line',
     icon: <BsDashLg />,
     selectable: true,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Add image',
     icon: <BsImage />,
     selectable: false,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Undo',
     icon: <HiArrowUturnLeft />,
     selectable: false,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
   {
     title: 'Redo',
     icon: <HiArrowUturnRight />,
     selectable: false,
-    onClick: () => toolState.setTool(new Brush()),
+    onClick: () => {},
   },
 ];
 

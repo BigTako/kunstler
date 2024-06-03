@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
-import { Line } from 'react-konva';
+import { Line, Rect } from 'react-konva';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
-import { Brush } from '@tools';
+import { Brush, Rect as RectTool } from '@tools';
 
 const headerToolbarButtons = [
   {
@@ -40,7 +40,12 @@ const headerToolbarButtons = [
     title: 'Rect shape',
     icon: <BsApp />,
     selectable: true,
-    onClick: () => {},
+    onClick: () =>
+      toolState.setTool(
+        new RectTool((shape, id) => (
+          <Rect key={id} x={shape.x} y={shape.y} width={shape.width} height={shape.height} fill="red" />
+        )),
+      ),
   },
   {
     title: 'Circle shape',

@@ -2,8 +2,14 @@
 
 import React from 'react';
 
+export enum ShapeEnum {
+  RECT = 'rect',
+  LINE = 'line',
+  CIRCLE = 'circle',
+}
+
 export interface ShapeType {
-  type: 'line' | 'rect' | 'circle';
+  type: ShapeEnum;
   strokeColor?: string;
   fillColor?: string;
 }
@@ -12,7 +18,7 @@ export interface LineType extends ShapeType {
   points: number[];
 }
 
-export interface ReactType extends ShapeType {
+export interface RectType extends ShapeType {
   x: number;
   y: number;
   width: number;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsideToolbar, HeaderToolbar } from '@components';
-import dynamic from 'next/dynamic';
 
+import dynamic from 'next/dynamic';
 const Canvas = dynamic(() => import('./_components/Canvas'), {
   ssr: false,
 });

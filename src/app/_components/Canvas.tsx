@@ -1,9 +1,14 @@
 'use client';
 import React from 'react';
 
+import dynamic from 'next/dynamic';
 import { observer } from 'mobx-react-lite';
 import { Stage, Layer } from 'react-konva';
 import { canvasState, toolState } from '@store';
+
+const Shape = dynamic(() => import('../_components/Shape'), {
+  ssr: false,
+});
 
 export const Canvas = observer(function () {
   return (
@@ -14,7 +19,11 @@ export const Canvas = observer(function () {
       onMouseMove={toolState.tool?.onMouseMove}
       onMouseUp={toolState.tool?.onMouseUp}
     >
-      <Layer>{canvasState.shapes.map((shape, i) => toolState.tool?.draw(shape, i))}</Layer>
+      <Layer>
+        {canvasState.shapes.map((shape, i) => (
+          <Shape key={i} shape={shape} />
+        ))}
+      </Layer>
     </Stage>
   );
 });

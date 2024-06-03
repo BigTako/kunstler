@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { DrawingFuncType, LineType, ShapeType, Tool } from '@tools';
+import { DrawingFuncType, LineType, RectType, ShapeType, Tool } from '@tools';
 import { canvasState } from '@store';
 
-export class Brush implements Tool {
+export class Rect implements Tool {
   lines: LineType[] = [];
   isDrawing: boolean = false;
   draw: DrawingFuncType;
@@ -16,22 +16,14 @@ export class Brush implements Tool {
     this.draw = draw;
   }
 
-  private startLine(pos: { x: number; y: number }) {
-    canvasState.addShape({ type: 'line', points: [pos.x, pos.y] } as ShapeType);
-  }
-
-  private addPoint(pos: { x: number; y: number }) {
-    let lastLine = canvasState.last() as LineType;
-    lastLine.points = lastLine.points.concat([pos.x, pos.y]);
-  }
-
   onMouseDown(e: KonvaEventObject<MouseEvent>) {
     this.isDrawing = true;
     const stage = e.target.getStage();
     if (stage) {
       const pos = stage.getPointerPosition();
+
       if (pos) {
-        this.startLine(pos);
+        canvasState.addShape({ type: 'rect', x: pos.x, y: pos.y, width: 0, height: 0 } as ShapeType);
       }
     }
   }
@@ -43,7 +35,12 @@ export class Brush implements Tool {
     const stage = e.target.getStage();
     if (stage) {
       const point = stage.getPointerPosition();
-      if (point) this.addPoint(point);
+      const lastRect = canvasState.shapes.pop() as RectType;
+      if (point && lastRect) {
+        const width = point.x - lastRect.x;
+        const height = point.y - lastRect.y;
+        canvasState.addShape({ ...lastRect, width, height } as ShapeType);
+      }
     }
   }
 

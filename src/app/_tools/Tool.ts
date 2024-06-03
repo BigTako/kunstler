@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { KonvaEventObject } from 'konva/lib/Node';
-import { DrawingFuncType } from '@tools';
 
 export interface Tool {
   onMouseUp(e?: KonvaEventObject<MouseEvent>): void;

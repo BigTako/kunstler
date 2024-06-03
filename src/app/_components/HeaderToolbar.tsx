@@ -7,7 +7,7 @@ import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
-import { Brush, Rect as RectTool } from '@tools';
+import { Brush, Circle as CircleTool, Rect as RectTool } from '@tools';
 
 const headerToolbarButtons = [
   {
@@ -32,7 +32,7 @@ const headerToolbarButtons = [
     title: 'Circle shape',
     icon: <BsCircle />,
     selectable: true,
-    onClick: () => {},
+    onClick: () => toolState.setTool(new CircleTool()),
   },
   {
     title: 'Eraser',

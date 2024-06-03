@@ -1,19 +1,16 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { DrawingFuncType, LineType, RectType, ShapeType, Tool } from '@tools';
+import { RectType, ShapeType, Tool } from '@tools';
 import { canvasState } from '@store';
 
 export class Rect implements Tool {
-  lines: LineType[] = [];
   isDrawing: boolean = false;
-  draw: DrawingFuncType;
 
-  constructor(draw: DrawingFuncType) {
+  constructor() {
     makeAutoObservable(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
-    this.draw = draw;
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {

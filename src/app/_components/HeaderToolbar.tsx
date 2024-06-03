@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
-import { Line, Rect } from 'react-konva';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
@@ -15,20 +14,7 @@ const headerToolbarButtons = [
     title: 'Brush',
     icon: <BsBrush />,
     selectable: true,
-    onClick: () =>
-      toolState.setTool(
-        new Brush((shape, id) => (
-          <Line
-            key={id}
-            points={shape.points}
-            stroke="#000"
-            strokeWidth={5}
-            tension={0.5}
-            lineCap="round"
-            lineJoin="round"
-          />
-        )),
-      ),
+    onClick: () => toolState.setTool(new Brush()),
   },
   {
     title: 'Fill',
@@ -40,12 +26,7 @@ const headerToolbarButtons = [
     title: 'Rect shape',
     icon: <BsApp />,
     selectable: true,
-    onClick: () =>
-      toolState.setTool(
-        new RectTool((shape, id) => (
-          <Rect key={id} x={shape.x} y={shape.y} width={shape.width} height={shape.height} fill="red" />
-        )),
-      ),
+    onClick: () => toolState.setTool(new RectTool()),
   },
   {
     title: 'Circle shape',

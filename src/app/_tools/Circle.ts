@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { RectType, ShapeType, Tool } from '@tools';
-import { canvasState } from '@store';
+import { canvasState, toolState } from '@store';
 
 export class Circle implements Tool {
   isDrawing: boolean = false;
@@ -20,7 +20,15 @@ export class Circle implements Tool {
       const pos = stage.getPointerPosition();
 
       if (pos) {
-        canvasState.addShape({ type: 'circle', x: pos.x, y: pos.y, radius: 0 } as ShapeType);
+        canvasState.addShape({
+          type: 'circle',
+          fillColor: toolState.fillColor,
+          strokeColor: toolState.strokeColor,
+          lineWidth: toolState.lineWidth,
+          x: pos.x,
+          y: pos.y,
+          radius: 0,
+        } as ShapeType);
       }
     }
   }

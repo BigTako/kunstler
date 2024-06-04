@@ -19,12 +19,14 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     );
   }
   if (shape.type === ShapeEnum.RECT) {
-    let { x, y, width, height } = shape as RectType;
-    return <Rect x={x} y={y} width={width} height={height} fill="red" />;
+    let { x, y, width, height, fillColor, strokeColor, lineWidth: strokeWidth } = shape as RectType;
+    return (
+      <Rect x={x} y={y} width={width} height={height} fill={fillColor} stroke={strokeColor} strokeWidth={strokeWidth} />
+    );
   }
   if (shape.type === ShapeEnum.CIRCLE) {
-    let { x, y, radius } = shape as CircleType;
-    return <Circle x={x} y={y} radius={radius} fill="black" />;
+    let { x, y, radius, fillColor, strokeColor, lineWidth: strokeWidth } = shape as CircleType;
+    return <Circle x={x} y={y} radius={radius} fill={fillColor} stroke={strokeColor} strokeWidth={strokeWidth} />;
   }
 });
 

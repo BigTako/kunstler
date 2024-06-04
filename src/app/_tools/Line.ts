@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { LineType, ShapeType, Tool } from '@tools';
-import { canvasState } from '@store';
+import { canvasState, toolState } from '@store';
 
 export class Line implements Tool {
   isDrawing: boolean = false;
@@ -14,7 +14,12 @@ export class Line implements Tool {
   }
 
   private startLine(pos: { x: number; y: number }) {
-    canvasState.addShape({ type: 'line', points: [pos.x, pos.y, pos.x, pos.y] } as ShapeType);
+    canvasState.addShape({
+      type: 'line',
+      strokeColor: toolState.strokeColor,
+      lineWidth: toolState.lineWidth,
+      points: [pos.x, pos.y, pos.x, pos.y],
+    } as ShapeType);
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {
@@ -37,9 +42,9 @@ export class Line implements Tool {
       const point = stage.getPointerPosition();
       if (point) {
         const { x, y } = point;
-        let { points } = canvasState.shapes.pop() as LineType;
+        let { points, ...rest } = canvasState.shapes.pop() as LineType;
         const [startX, startY] = points;
-        canvasState.addShape({ type: 'line', points: [startX, startY, x, y] } as ShapeType);
+        canvasState.addShape({ ...rest, points: [startX, startY, x, y] } as ShapeType);
       }
     }
   }

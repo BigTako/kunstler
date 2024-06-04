@@ -10,6 +10,7 @@ export enum ShapeEnum {
 
 export interface ShapeType {
   type: ShapeEnum;
+  lineWidth?: number;
   strokeColor?: string;
   fillColor?: string;
 }

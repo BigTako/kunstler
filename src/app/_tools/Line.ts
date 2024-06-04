@@ -19,7 +19,7 @@ export class Line implements Tool {
       strokeColor: toolState.strokeColor,
       lineWidth: toolState.lineWidth,
       points: [pos.x, pos.y, pos.x, pos.y],
-    } as ShapeType);
+    } as LineType);
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {

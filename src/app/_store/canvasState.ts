@@ -22,8 +22,8 @@ class CanvasState {
     return null;
   }
 
-  addShape(shape: ShapeType) {
-    this.shapes.push({ ...shape, id: this.shapes.length + 1 });
+  addShape(shape: Omit<ShapeType, 'id'>) {
+    this.shapes.push({ ...shape, id: this.shapes.length + 1 } as ShapeType);
   }
 }
 

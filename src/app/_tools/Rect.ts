@@ -29,7 +29,7 @@ export class Rect implements Tool {
           y: pos.y,
           width: 0,
           height: 0,
-        } as ShapeType);
+        } as RectType);
       }
     }
   }

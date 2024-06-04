@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { RectType, ShapeType, Tool } from '@tools';
+import { CircleType, RectType, ShapeType, Tool } from '@tools';
 import { canvasState, toolState } from '@store';
 
 export class Circle implements Tool {
@@ -28,7 +28,7 @@ export class Circle implements Tool {
           x: pos.x,
           y: pos.y,
           radius: 0,
-        } as ShapeType);
+        } as CircleType);
       }
     }
   }

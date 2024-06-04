@@ -13,7 +13,7 @@ class ToolState {
     this.lineWidth = 1;
   }
 
-  setTool(tool: Tool) {
+  setTool(tool: Tool | null) {
     this.tool = tool;
   }
 

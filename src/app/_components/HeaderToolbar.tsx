@@ -4,12 +4,21 @@ import React, { useEffect, useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
+import { PiHand } from 'react-icons/pi';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
-import { Brush, Circle as CircleTool, Line as LineTool, Rect as RectTool } from '@tools';
+import { Brush, Circle as CircleTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
 
 const headerToolbarButtons = [
+  {
+    title: 'Palm',
+    icon: <PiHand />,
+    selectable: true,
+    onClick: () => {
+      toolState.setTool(new Palm());
+    },
+  },
   {
     title: 'Brush',
     icon: <BsBrush />,

@@ -22,6 +22,10 @@ class CanvasState {
     return null;
   }
 
+  updateShape(id: number, newShape: Partial<ShapeType>) {
+    this.shapes = this.shapes.map(s => (s.id === id ? { ...s, ...newShape, id } : s));
+  }
+
   addShape(shape: Omit<ShapeType, 'id'>) {
     this.shapes.push({ ...shape, id: this.shapes.length + 1 } as ShapeType);
   }

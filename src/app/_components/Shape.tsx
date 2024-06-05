@@ -1,10 +1,13 @@
-import React, { LegacyRef } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Rect, Line, Transformer, Ellipse } from 'react-konva';
+import { Rect, Line, Ellipse } from 'react-konva';
 import { EllipseType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
+import dynamic from 'next/dynamic';
+
+const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
 interface ScalableRectProps {
   id: number;
@@ -18,72 +21,33 @@ interface ScalableRectProps {
   stroke: string;
   strokeWidth: number;
   draggable: boolean;
-  onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => void;
 }
 
-const Rectangle = (props: ScalableRectProps) => {
-  const { id, isSelected, onSelect, x, y, stroke, strokeWidth, fill, width, height, draggable, onDragEnd } = props;
-  const shapeRef = React.useRef<Konva.Rect>(null);
-  const trRef = React.useRef<Konva.Transformer>(null);
-
-  React.useEffect(() => {
-    if (isSelected) {
-      if (trRef.current) {
-        const tr = trRef.current;
-        tr.nodes([shapeRef.current as Konva.Rect]);
-        tr.getLayer()?.batchDraw();
-      }
-    }
-  }, [isSelected]);
-
+function ScalableRect(props: ScalableRectProps) {
+  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable, ...scalableProps } = props;
   return (
-    <React.Fragment>
-      <Rect
-        x={x}
-        y={y}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        fill={fill}
-        width={width}
-        height={height}
-        onClick={onSelect}
-        onTap={onSelect}
-        draggable={draggable}
-        onDragEnd={onDragEnd}
-        ref={shapeRef as LegacyRef<Konva.Rect>}
-        onTransformEnd={() => {
-          const node = shapeRef.current;
-          if (node) {
-            const scaleX = node.scaleX();
-            const scaleY = node.scaleY();
-
-            // we will reset it back
-            node.scaleX(1);
-            node.scaleY(1);
-            canvasState.updateShape(id, {
-              x: node.x(),
-              y: node.y(),
-              width: Math.max(5, node.width() * scaleX),
-              height: Math.max(node.height() * scaleY),
-            } as RectType);
-          }
-        }}
-      />
-      {isSelected && (
-        <Transformer
-          ref={trRef as LegacyRef<Konva.Transformer>}
-          flipEnabled={false}
-          boundBoxFunc={(oldBox, newBox) => {
-            if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
-              return oldBox;
-            }
-            return newBox;
-          }}
-        />
-      )}
-    </React.Fragment>
+    <Scalable
+      {...scalableProps}
+      scale={node => {
+        const scaleX = node.scaleX();
+        const scaleY = node.scaleY();
+        const scaledWidth = Math.max(5, node.width() * scaleX);
+        const scaledHeight = Math.max(5, node.height() * scaleY);
+        console.log({ scaleX, scaleY, scaledWidth, scaledHeight });
+        canvasState.updateShape(props.id, {
+          x: node.x(),
+          y: node.y(),
+          width: scaledWidth,
+          height: scaledHeight,
+        } as RectType);
+      }}
+    >
+      <Draggable id={id} draggable={draggable}>
+        <Rect x={x} y={y} stroke={stroke} strokeWidth={strokeWidth} fill={fill} width={width} height={height} />
+      </Draggable>
+    </Scalable>
   );
-};
+}
 
 interface ScalableEllipseProps {
   id: number;
@@ -97,71 +61,49 @@ interface ScalableEllipseProps {
   stroke: string;
   strokeWidth: number;
   draggable: boolean;
-  onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => void;
 }
 
-const ScalableEllipse = (props: ScalableEllipseProps) => {
-  const { id, isSelected, onSelect, x, y, stroke, strokeWidth, fill, radiusX, radiusY, onDragEnd, draggable } = props;
-  const shapeRef = React.useRef<Konva.Ellipse>(null);
-  const trRef = React.useRef<Konva.Transformer>(null);
-
-  React.useEffect(() => {
-    if (isSelected) {
-      if (trRef.current) {
-        const tr = trRef.current;
-        tr.nodes([shapeRef.current as Konva.Ellipse]);
-        tr.getLayer()?.batchDraw();
-      }
-    }
-  }, [isSelected]);
-
+function ScalableEllipse(props: ScalableEllipseProps) {
+  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable, ...scalableProps } = props;
   return (
-    <React.Fragment>
-      <Ellipse
-        x={x}
-        y={y}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        fill={fill}
-        radiusX={radiusX}
-        radiusY={radiusY}
-        onClick={onSelect}
-        onTap={onSelect}
-        ref={shapeRef as LegacyRef<Konva.Ellipse>}
-        draggable={draggable}
-        onDragEnd={onDragEnd}
-        onTransformEnd={() => {
-          const node = shapeRef.current;
-          if (node) {
-            const scaleX = node.scaleX();
-            const scaleY = node.scaleY();
-            node.scaleX(1);
-            node.scaleY(1);
-            canvasState.updateShape(id, {
-              x: node.x(),
-              y: node.y(),
-              radiusX: (node.width() * scaleX) / 2,
-              radiusY: (node.height() * scaleY) / 2,
-            } as EllipseType);
-          }
-        }}
-      />
-      {isSelected && (
-        <Transformer
-          ref={trRef as LegacyRef<Konva.Transformer>}
-          flipEnabled={false}
-          boundBoxFunc={(oldBox, newBox) => {
-            // limit resize
-            if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
-              return oldBox;
-            }
-            return newBox;
-          }}
+    <Scalable
+      {...scalableProps}
+      scale={node => {
+        const scaleX = node.scaleX();
+        const scaleY = node.scaleY();
+        const radiusX = (node.width() * scaleX) / 2;
+        const radiusY = (node.height() * scaleY) / 2;
+        canvasState.updateShape(id, {
+          x: node.x(),
+          y: node.y(),
+          radiusX,
+          radiusY,
+        } as EllipseType);
+      }}
+    >
+      <Draggable id={id} draggable={draggable}>
+        <Ellipse
+          x={x}
+          y={y}
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          fill={fill}
+          radiusX={radiusX}
+          radiusY={radiusY}
         />
-      )}
-    </React.Fragment>
+      </Draggable>
+    </Scalable>
   );
-};
+}
+
+function Draggable({ id, draggable, children }: { id: number; draggable: boolean; children: ReactNode }) {
+  return React.cloneElement(children as ReactElement, {
+    draggable,
+    onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => {
+      canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as RectType);
+    },
+  });
+}
 
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   const [selectedId, setSelectedId] = React.useState(-1);
@@ -175,6 +117,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   };
 
   const draggable = toolState.tool instanceof Palm;
+
   if (shape.type === ShapeEnum.LINE) {
     let { points, strokeColor, lineWidth } = shape as LineType;
     return (
@@ -192,22 +135,21 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     let { id, x, y, width, height, fillColor, strokeColor, lineWidth: strokeWidth } = shape as RectType;
 
     return (
-      <Rectangle
-        id={id}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        fill={fillColor as string}
-        stroke={strokeColor as string}
-        strokeWidth={strokeWidth as number}
-        draggable={draggable}
-        isSelected={id === selectedId}
-        onSelect={() => handleSelect(id)}
-        onDragEnd={e => {
-          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as RectType);
-        }}
-      />
+      <Draggable id={id} draggable={draggable}>
+        <ScalableRect
+          id={id}
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          draggable={draggable}
+          fill={fillColor as string}
+          stroke={strokeColor as string}
+          strokeWidth={strokeWidth as number}
+          isSelected={id === selectedId}
+          onSelect={() => handleSelect(id)}
+        />
+      </Draggable>
     );
   }
   if (shape.type === ShapeEnum.ELLIPSE) {
@@ -222,11 +164,8 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         fill={fillColor}
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
-        draggable={draggable}
-        onDragEnd={e => {
-          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
-        }}
         isSelected={id === selectedId}
+        draggable={draggable}
         onSelect={() => handleSelect(id)}
       />
     );

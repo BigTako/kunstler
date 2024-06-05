@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { Tool } from './Tool';
-import { ImageType } from '@tools';
+import { ImageType, ShapeEnum } from '@tools';
 import { canvasState } from '../_store';
 
 export class ImageTool implements Tool {
@@ -11,26 +11,15 @@ export class ImageTool implements Tool {
   }
 
   upload(file: File) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.src = e.target?.result as string;
-      img.onload = () => {
-        const image = new window.Image();
-        image.src = img.src;
-        image.onload = () => {
-          canvasState.addShape({
-            type: 'image',
-            src: img.src,
-            x: 0,
-            y: 0,
-            width: image.width,
-            height: image.height,
-          } as ImageType);
-        };
-      };
-    };
-    reader.readAsDataURL(file);
+    const url = URL.createObjectURL(file);
+    canvasState.addShape({
+      type: ShapeEnum.IMAGE,
+      src: url,
+      x: 0,
+      y: 0,
+      width: 200,
+      height: 200,
+    } as ImageType);
   }
 
   onMouseDown() {}

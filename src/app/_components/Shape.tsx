@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Rect, Line, Ellipse, Image, Text } from 'react-konva';
+import { Rect, Line, Ellipse, Image } from 'react-konva';
 import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
@@ -113,12 +113,8 @@ function ScalableEllipse(props: ScalableEllipseProps) {
 function UploadableImage({ id, url }: { url: string; id: number }) {
   const [image, status] = useImage(url);
 
-  if (status === 'loading') {
-    return <Text text="Loading image..." />;
-  }
-
-  if (status === 'failed') {
-    return <Text text="Failed to load" />;
+  if (status !== 'loaded') {
+    return null;
   }
 
   return <Image alt={`Uploaded image with ${id}`} image={image} />;

@@ -1,7 +1,7 @@
 'use client';
 
 import Konva from 'konva';
-import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useRef } from 'react';
+import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
 
 function Scalable<T extends Konva.Shape>({
@@ -18,7 +18,7 @@ function Scalable<T extends Konva.Shape>({
   const shapeRef = useRef<T>(null);
   const trRef = useRef<Konva.Transformer>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isSelected) {
       if (trRef.current) {
         const tr = trRef.current;

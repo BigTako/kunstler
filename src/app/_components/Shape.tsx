@@ -25,6 +25,7 @@ interface ScalableRectProps {
 
 function ScalableRect(props: ScalableRectProps) {
   const { id, x, y, stroke, strokeWidth, fill, width, height, draggable, ...scalableProps } = props;
+
   return (
     <Scalable
       {...scalableProps}
@@ -148,7 +149,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         fill={fillColor as string}
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
-        isSelected={id === selectedId}
+        isSelected={draggable ? id === selectedId : false}
         onSelect={() => handleSelect(id)}
       />
     );
@@ -166,7 +167,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
         isSelected={id === selectedId}
-        draggable={draggable}
+        draggable={draggable ? id === selectedId : false}
         onSelect={() => handleSelect(id)}
       />
     );

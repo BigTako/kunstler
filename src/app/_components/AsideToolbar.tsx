@@ -1,12 +1,12 @@
 'use client';
 
 import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
-import { BsPalette } from 'react-icons/bs';
 import { observer } from 'mobx-react-lite';
-import { BsAspectRatio, BsCrop } from 'react-icons/bs';
+import { BsAspectRatio, BsCrop, BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { toolState } from '@store';
 import { cn } from '@/utils/cn';
+import { ImageProcessingMode, ImageTool } from '../_tools';
 
 function ColorInput({
   id,
@@ -55,6 +55,10 @@ const imageProcessingOptions = [
     icon: <BsAspectRatio />,
     selectable: true,
     onClick: () => {
+      const tool = toolState.tool;
+      if (tool && tool instanceof ImageTool) {
+        tool.setMode(ImageProcessingMode.RESIZE);
+      }
       // toolState.setTool(new Palm());
     },
   },
@@ -63,7 +67,10 @@ const imageProcessingOptions = [
     icon: <BsCrop />,
     selectable: true,
     onClick: () => {
-      // toolState.setTool(new Palm());
+      const tool = toolState.tool;
+      if (tool && tool instanceof ImageTool) {
+        tool.setMode(ImageProcessingMode.CROP);
+      }
     },
   },
 ];

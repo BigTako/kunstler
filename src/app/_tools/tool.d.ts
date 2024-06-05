@@ -35,6 +35,11 @@ export interface EllipseType extends ShapeType {
   radiusY: number;
 }
 
+export enum ImageProcessingMode {
+  RESIZE = 'resize',
+  CROP = 'crop',
+}
+
 export interface ImageType extends ShapeType {
   x: number;
   y: number;

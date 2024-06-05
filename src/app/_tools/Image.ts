@@ -1,13 +1,19 @@
 import { makeAutoObservable } from 'mobx';
 import { Tool } from './Tool';
-import { ImageType } from '@tools';
+import { ImageProcessingMode, ImageType } from '@tools';
 import { canvasState } from '@store';
 
 export class ImageTool implements Tool {
-  isDrawing: boolean = false;
+  mode: ImageProcessingMode;
+  // isDrawing: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
+    this.mode = ImageProcessingMode.RESIZE;
+  }
+
+  setMode(mode: ImageProcessingMode) {
+    this.mode = mode;
   }
 
   upload(file: File) {

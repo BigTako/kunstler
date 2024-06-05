@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Rect, Line, Ellipse, Image } from 'react-konva';
@@ -174,6 +174,12 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   };
 
   const draggable = toolState.tool instanceof Palm;
+
+  useEffect(() => {
+    if (!draggable) {
+      setSelectedId(-1);
+    }
+  }, [draggable]);
 
   if (shape.type === ShapeEnum.LINE) {
     let { points, strokeColor, lineWidth } = shape as LineType;

@@ -6,6 +6,7 @@ export enum ShapeEnum {
   RECT = 'rect',
   LINE = 'line',
   ELLIPSE = 'ellipse',
+  IMAGE = 'image',
 }
 
 export interface ShapeType {
@@ -32,6 +33,14 @@ export interface EllipseType extends ShapeType {
   y: number;
   radiusX: number;
   radiusY: number;
+}
+
+export interface ImageType extends ShapeType {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  src: string;
 }
 
 export type DrawingFuncType = (shape: Shape, id: number | string) => React.ReactNode;

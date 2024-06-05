@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Rect, Line, Ellipse } from 'react-konva';
-import { EllipseType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { Rect, Line, Ellipse, Image, Text } from 'react-konva';
+import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
 import dynamic from 'next/dynamic';
+import useImage from 'use-image';
 
 const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
@@ -109,6 +110,20 @@ function ScalableEllipse(props: ScalableEllipseProps) {
   );
 }
 
+function UploadableImage({ id, url }: { url: string; id: number }) {
+  const [image, status] = useImage(url);
+
+  if (status === 'loading') {
+    return <Text text="Loading image..." />;
+  }
+
+  if (status === 'failed') {
+    return <Text text="Failed to load" />;
+  }
+
+  return <Image alt={`Uploaded image with ${id}`} image={image} />;
+}
+
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   const [selectedId, setSelectedId] = React.useState(-1);
 
@@ -171,6 +186,9 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         onSelect={() => handleSelect(id)}
       />
     );
+  }
+  if (shape.type === ShapeEnum.IMAGE) {
+    return <UploadableImage id={shape.id} url={(shape as ImageType).src} />;
   }
 });
 

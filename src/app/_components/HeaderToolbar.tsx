@@ -9,6 +9,7 @@ import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
 import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
+import { ImageTool } from '../_tools/Image';
 
 const headerToolbarButtons = [
   {
@@ -59,7 +60,7 @@ const headerToolbarButtons = [
     title: 'Add image',
     icon: <BsImage />,
     selectable: false,
-    onClick: () => {},
+    onClick: () => document.getElementById('image-input')?.click(),
   },
   {
     title: 'Undo',
@@ -84,6 +85,17 @@ export function HeaderToolbar() {
 
   return (
     <header className="absolute right-1/2 top-6 flex translate-x-1/2 gap-3 rounded-lg bg-primary-50 p-1 shadow-sm">
+      <input
+        type="file"
+        id="image-input"
+        accept="image/*"
+        className="hidden"
+        onChange={e => {
+          const tool = new ImageTool();
+          toolState.setTool(tool);
+          tool.upload(e.target.files?.[0] as File);
+        }}
+      />
       {headerToolbarButtons.map(({ title, icon, onClick, selectable }) => (
         <SquareButton
           key={title}

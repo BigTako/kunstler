@@ -5,7 +5,7 @@ import React from 'react';
 export enum ShapeEnum {
   RECT = 'rect',
   LINE = 'line',
-  CIRCLE = 'circle',
+  ELLIPSE = 'ellipse',
 }
 
 export interface ShapeType {
@@ -27,10 +27,11 @@ export interface RectType extends ShapeType {
   height: number;
 }
 
-export interface CircleType extends ShapeType {
+export interface EllipseType extends ShapeType {
   x: number;
   y: number;
-  radius: number;
+  radiusX: number;
+  radiusY: number;
 }
 
 export type DrawingFuncType = (shape: Shape, id: number | string) => React.ReactNode;

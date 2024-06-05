@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { CircleType, RectType, ShapeType, Tool } from '@tools';
+import { EllipseType, RectType, ShapeType, Tool } from '@tools';
 import { canvasState, toolState } from '@store';
 
-export class Circle implements Tool {
+export class Ellipse implements Tool {
   isDrawing: boolean = false;
 
   constructor() {
@@ -21,14 +21,15 @@ export class Circle implements Tool {
 
       if (pos) {
         canvasState.addShape({
-          type: 'circle',
+          type: 'ellipse',
           fillColor: toolState.fillColor,
           strokeColor: toolState.strokeColor,
           lineWidth: toolState.lineWidth,
           x: pos.x,
           y: pos.y,
-          radius: 0,
-        } as CircleType);
+          radiusX: 0,
+          radiusY: 0,
+        } as EllipseType);
       }
     }
   }
@@ -46,7 +47,7 @@ export class Circle implements Tool {
         let c2 = point.y - lastCircle.y;
 
         const radius = Math.sqrt(Math.pow(c1, 2) + Math.pow(c2, 2));
-        canvasState.addShape({ ...lastCircle, radius } as ShapeType);
+        canvasState.addShape({ ...lastCircle, radiusX: radius, radiusY: radius } as ShapeType);
       }
     }
   }

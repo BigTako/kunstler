@@ -1,8 +1,8 @@
 import React, { LegacyRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Rect, Line, Circle, Transformer } from 'react-konva';
-import { CircleType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { Rect, Line, Transformer, Ellipse } from 'react-konva';
+import { EllipseType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
 
@@ -60,7 +60,6 @@ const Rectangle = ({
           ref={trRef as LegacyRef<Konva.Transformer>}
           flipEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
-            // limit resize
             if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
               return oldBox;
             }
@@ -117,19 +116,20 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
       />
     );
   }
-  if (shape.type === ShapeEnum.CIRCLE) {
-    let { id, x, y, radius, fillColor, strokeColor, lineWidth: strokeWidth } = shape as CircleType;
+  if (shape.type === ShapeEnum.ELLIPSE) {
+    let { id, x, y, radiusX, radiusY, fillColor, strokeColor, lineWidth: strokeWidth } = shape as EllipseType;
     return (
-      <Circle
+      <Ellipse
         x={x}
         y={y}
-        radius={radius}
+        radiusX={radiusX}
+        radiusY={radiusY}
         fill={fillColor}
         stroke={strokeColor}
         strokeWidth={strokeWidth}
         draggable={draggable}
         onDragEnd={e => {
-          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as CircleType);
+          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
         }}
       />
     );

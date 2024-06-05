@@ -8,7 +8,7 @@ import { PiHand } from 'react-icons/pi';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { toolState } from '@store';
-import { Brush, Circle as CircleTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
+import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
 
 const headerToolbarButtons = [
   {
@@ -38,10 +38,10 @@ const headerToolbarButtons = [
     onClick: () => toolState.setTool(new RectTool()),
   },
   {
-    title: 'Circle shape',
+    title: 'Ellipse shape',
     icon: <BsCircle />,
     selectable: true,
-    onClick: () => toolState.setTool(new CircleTool()),
+    onClick: () => toolState.setTool(new EllipseTool()),
   },
   {
     title: 'Eraser',

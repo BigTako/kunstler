@@ -42,7 +42,7 @@ export class Line implements Tool {
       const point = stage.getPointerPosition();
       if (point) {
         const { x, y } = point;
-        let { points, ...rest } = canvasState.shapes.pop() as LineType;
+        let { points, ...rest } = canvasState.undoList.pop() as LineType;
         const [startX, startY] = points;
         canvasState.addShape({ ...rest, points: [startX, startY, x, y] } as ShapeType);
       }

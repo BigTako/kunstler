@@ -42,7 +42,7 @@ export class Ellipse implements Tool {
     const stage = e.target.getStage();
     if (stage) {
       const point = stage.getPointerPosition();
-      const lastCircle = canvasState.shapes.pop() as RectType;
+      const lastCircle = canvasState.undoList.pop() as RectType;
       if (point && lastCircle) {
         let c1 = point.x - lastCircle.x;
         let c2 = point.y - lastCircle.y;

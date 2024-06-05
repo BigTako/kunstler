@@ -41,7 +41,7 @@ export class Rect implements Tool {
     const stage = e.target.getStage();
     if (stage) {
       const point = stage.getPointerPosition();
-      const lastRect = canvasState.shapes.pop() as RectType;
+      const lastRect = canvasState.undoList.pop() as RectType;
       if (point && lastRect) {
         const width = point.x - lastRect.x;
         const height = point.y - lastRect.y;

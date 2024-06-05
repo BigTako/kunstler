@@ -20,7 +20,7 @@ export const Canvas = observer(function () {
       onMouseUp={toolState.tool?.onMouseUp}
     >
       <Layer>
-        {canvasState.shapes.map((shape, i) => (
+        {canvasState.undoList.map((shape, i) => (
           <Shape key={i} shape={shape} />
         ))}
       </Layer>

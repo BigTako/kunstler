@@ -7,7 +7,7 @@ import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { PiHand } from 'react-icons/pi';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
-import { toolState } from '@store';
+import { canvasState, toolState } from '@store';
 import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
 import { ImageTool } from '../_tools/Image';
 
@@ -66,13 +66,17 @@ const headerToolbarButtons = [
     title: 'Undo',
     icon: <HiArrowUturnLeft />,
     selectable: false,
-    onClick: () => {},
+    onClick: () => {
+      canvasState.undo();
+    },
   },
   {
     title: 'Redo',
     icon: <HiArrowUturnRight />,
     selectable: false,
-    onClick: () => {},
+    onClick: () => {
+      canvasState.redo();
+    },
   },
 ];
 

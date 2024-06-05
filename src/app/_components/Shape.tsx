@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Rect, Line, Ellipse } from 'react-konva';
@@ -42,9 +42,19 @@ function ScalableRect(props: ScalableRectProps) {
         } as RectType);
       }}
     >
-      <Draggable id={id} draggable={draggable}>
-        <Rect x={x} y={y} stroke={stroke} strokeWidth={strokeWidth} fill={fill} width={width} height={height} />
-      </Draggable>
+      <Rect
+        x={x}
+        y={y}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        fill={fill}
+        width={width}
+        height={height}
+        draggable={draggable}
+        onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
+          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as RectType);
+        }}
+      />
     </Scalable>
   );
 }
@@ -81,28 +91,21 @@ function ScalableEllipse(props: ScalableEllipseProps) {
         } as EllipseType);
       }}
     >
-      <Draggable id={id} draggable={draggable}>
-        <Ellipse
-          x={x}
-          y={y}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          fill={fill}
-          radiusX={radiusX}
-          radiusY={radiusY}
-        />
-      </Draggable>
+      <Ellipse
+        x={x}
+        y={y}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        fill={fill}
+        radiusX={radiusX}
+        radiusY={radiusY}
+        draggable={draggable}
+        onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
+          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
+        }}
+      />
     </Scalable>
   );
-}
-
-function Draggable({ id, draggable, children }: { id: number; draggable: boolean; children: ReactNode }) {
-  return React.cloneElement(children as ReactElement, {
-    draggable,
-    onDragEnd: (e: Konva.KonvaEventObject<DragEvent>) => {
-      canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as RectType);
-    },
-  });
 }
 
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
@@ -135,21 +138,19 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     let { id, x, y, width, height, fillColor, strokeColor, lineWidth: strokeWidth } = shape as RectType;
 
     return (
-      <Draggable id={id} draggable={draggable}>
-        <ScalableRect
-          id={id}
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          draggable={draggable}
-          fill={fillColor as string}
-          stroke={strokeColor as string}
-          strokeWidth={strokeWidth as number}
-          isSelected={id === selectedId}
-          onSelect={() => handleSelect(id)}
-        />
-      </Draggable>
+      <ScalableRect
+        id={id}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        draggable={draggable}
+        fill={fillColor as string}
+        stroke={strokeColor as string}
+        strokeWidth={strokeWidth as number}
+        isSelected={id === selectedId}
+        onSelect={() => handleSelect(id)}
+      />
     );
   }
   if (shape.type === ShapeEnum.ELLIPSE) {

@@ -1,11 +1,12 @@
 'use client';
 
-import { cn } from '@/utils/cn';
 import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
 import { BsPalette } from 'react-icons/bs';
-import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
+import { BsAspectRatio, BsCrop } from 'react-icons/bs';
+import { SquareButton } from '@components';
 import { toolState } from '@store';
+import { cn } from '@/utils/cn';
 
 function ColorInput({
   id,
@@ -48,7 +49,28 @@ export function MobileAsideToolbar() {
   );
 }
 
+const imageProcessingOptions = [
+  {
+    title: 'Resize',
+    icon: <BsAspectRatio />,
+    selectable: true,
+    onClick: () => {
+      // toolState.setTool(new Palm());
+    },
+  },
+  {
+    title: 'Crop',
+    icon: <BsCrop />,
+    selectable: true,
+    onClick: () => {
+      // toolState.setTool(new Palm());
+    },
+  },
+];
+
 const Toolbar = observer(function ({ className }: { className?: string }) {
+  const [selectedOption, setSelectedOption] = useState('Resize');
+
   const handleStrokeColorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => toolState.setStrokeColor(e.target.value),
     [],
@@ -92,6 +114,27 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
           onChange={handleLineWidthChange}
           defaultValue={toolState.lineWidth}
         />
+      </div>
+      <div className="flex flex-col gap-3">
+        <label className="inline-flex items-center">Image processing</label>
+        <div className="flex gap-3">
+          {imageProcessingOptions.map(({ title, icon, onClick, selectable }) => (
+            <SquareButton
+              key={title}
+              title={title}
+              className={cn(
+                'md:h-[40px] md:w-[40px]',
+                selectable && selectedOption === title ? 'bg-secondary-200' : 'bg-secondary-100',
+              )}
+              onClick={() => {
+                onClick?.();
+                setSelectedOption(title);
+              }}
+            >
+              {icon}
+            </SquareButton>
+          ))}
+        </div>
       </div>
     </aside>
   );

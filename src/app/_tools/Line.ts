@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { LineType, ShapeType, Tool } from '@tools';
+import { LineType, ShapeEnum, ShapeType, Tool } from '@tools';
 import { canvasState, toolState } from '@store';
 
 export class Line implements Tool {
@@ -15,7 +15,7 @@ export class Line implements Tool {
 
   private startLine(pos: { x: number; y: number }) {
     canvasState.addShape({
-      type: 'line',
+      type: ShapeEnum.LINE,
       strokeColor: toolState.strokeColor,
       lineWidth: toolState.lineWidth,
       points: [pos.x, pos.y, pos.x, pos.y],

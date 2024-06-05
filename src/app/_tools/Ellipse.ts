@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { EllipseType, RectType, ShapeType, Tool } from '@tools';
+import { EllipseType, RectType, ShapeEnum, ShapeType, Tool } from '@tools';
 import { canvasState, toolState } from '@store';
 
 export class Ellipse implements Tool {
@@ -14,6 +14,7 @@ export class Ellipse implements Tool {
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {
+    console.log('drawing ellipse');
     this.isDrawing = true;
     const stage = e.target.getStage();
     if (stage) {
@@ -21,7 +22,7 @@ export class Ellipse implements Tool {
 
       if (pos) {
         canvasState.addShape({
-          type: 'ellipse',
+          type: ShapeEnum.ELLIPSE,
           fillColor: toolState.fillColor,
           strokeColor: toolState.strokeColor,
           lineWidth: toolState.lineWidth,

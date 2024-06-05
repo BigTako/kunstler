@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { RectType, ShapeType, Tool } from '@tools';
+import { RectType, ShapeEnum, ShapeType, Tool } from '@tools';
 import { canvasState, toolState } from '@store';
 
 export class Rect implements Tool {
@@ -21,7 +21,7 @@ export class Rect implements Tool {
 
       if (pos) {
         canvasState.addShape({
-          type: 'rect',
+          type: ShapeEnum.RECT,
           fillColor: toolState.fillColor,
           strokeColor: toolState.strokeColor,
           lineWidth: toolState.lineWidth,

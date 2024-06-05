@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { Tool } from './Tool';
-import { ImageType, ShapeEnum } from '@tools';
-import { canvasState } from '../_store';
+import { ImageType } from '@tools';
+import { canvasState } from '@store';
 
 export class ImageTool implements Tool {
   isDrawing: boolean = false;
@@ -11,15 +11,30 @@ export class ImageTool implements Tool {
   }
 
   upload(file: File) {
-    const url = URL.createObjectURL(file);
-    canvasState.addShape({
-      type: ShapeEnum.IMAGE,
-      src: url,
-      x: 0,
-      y: 0,
-      width: 200,
-      height: 200,
-    } as ImageType);
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.src = e.target?.result as string;
+      img.onload = () => {
+        const image = new window.Image();
+        image.src = img.src;
+        const imgWidth = image.width / 3;
+        const imgHeight = image.height / 3;
+        const x = window.innerWidth / 2 - imgWidth / 2;
+        const y = window.innerHeight / 2 - imgHeight / 2;
+        image.onload = () => {
+          canvasState.addShape({
+            type: 'image',
+            src: img.src,
+            x,
+            y,
+            width: imgWidth,
+            height: imgHeight,
+          } as ImageType);
+        };
+      };
+    };
+    reader.readAsDataURL(file);
   }
 
   onMouseDown() {}

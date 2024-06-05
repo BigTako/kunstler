@@ -35,7 +35,6 @@ function ScalableRect(props: ScalableRectProps) {
         const scaleY = node.scaleY();
         const scaledWidth = Math.max(5, node.width() * scaleX);
         const scaledHeight = Math.max(5, node.height() * scaleY);
-        console.log({ scaleX, scaleY, scaledWidth, scaledHeight });
         canvasState.updateShape(props.id, {
           x: node.x(),
           y: node.y(),
@@ -110,14 +109,57 @@ function ScalableEllipse(props: ScalableEllipseProps) {
   );
 }
 
-function UploadableImage({ id, url }: { url: string; id: number }) {
-  const [image, status] = useImage(url);
+interface ScalableImageProps {
+  id: number;
+  isSelected: boolean;
+  onSelect: () => void;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  src: string;
+  draggable: boolean;
+}
+
+function ScalableImage(props: ScalableImageProps) {
+  const { id, x, y, height, width, draggable, src, ...scalableProps } = props;
+
+  const [image, status] = useImage(src);
 
   if (status !== 'loaded') {
     return null;
   }
 
-  return <Image alt={`Uploaded image with ${id}`} image={image} />;
+  return (
+    <Scalable
+      {...scalableProps}
+      scale={node => {
+        const scaleX = node.scaleX();
+        const scaleY = node.scaleY();
+        const scaledWidth = Math.max(5, node.width() * scaleX);
+        const scaledHeight = Math.max(5, node.height() * scaleY);
+        canvasState.updateShape(id, {
+          x: node.x(),
+          y: node.y(),
+          width: scaledWidth,
+          height: scaledHeight,
+        } as ImageType);
+      }}
+    >
+      <Image
+        draggable={draggable}
+        onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
+          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
+        }}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        alt={`Uploaded image with ${id}`}
+        image={image}
+      />
+    </Scalable>
+  );
 }
 
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
@@ -177,14 +219,27 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         fill={fillColor}
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
-        isSelected={id === selectedId}
         draggable={draggable ? id === selectedId : false}
+        isSelected={id === selectedId}
         onSelect={() => handleSelect(id)}
       />
     );
   }
   if (shape.type === ShapeEnum.IMAGE) {
-    return <UploadableImage id={shape.id} url={(shape as ImageType).src} />;
+    const { id, x, y, width, height, src } = shape as ImageType;
+    return (
+      <ScalableImage
+        id={id}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        src={src}
+        draggable={draggable ? id === selectedId : false}
+        isSelected={selectedId === id}
+        onSelect={() => handleSelect(id)}
+      />
+    );
   }
 });
 

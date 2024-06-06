@@ -2,11 +2,12 @@ import React, { LegacyRef, useEffect, useRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Line, Image, Transformer } from 'react-konva';
-import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { EllipseType, ImageTool, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
+import { observable } from 'mobx';
 
 // const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 const ScalableRect = dynamic(() => import('./ScalableRect'), { ssr: false });
@@ -52,6 +53,8 @@ function FilterImage(props: ScalableImageProps) {
     }
   }, [image]);
 
+  const tool = toolState.tool as ImageTool;
+
   return (
     <>
       <Image
@@ -68,7 +71,7 @@ function FilterImage(props: ScalableImageProps) {
         height={height}
         image={image}
         filters={[Konva.Filters.Blur]}
-        blurRadius={10}
+        blurRadius={tool.blurRadius}
       />
       {isSelected && (
         <Transformer

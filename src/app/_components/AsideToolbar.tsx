@@ -6,6 +6,7 @@ import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
 import { toolState } from '@store';
+import { ImageTool } from '../_tools';
 
 function ColorInput({
   id,
@@ -48,7 +49,42 @@ export function MobileAsideToolbar() {
   );
 }
 
+function RangeInput({
+  label,
+  defaultValue,
+  min,
+  max,
+  onChange,
+}: {
+  label: string;
+  defaultValue: number | string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  min: number;
+  max: number;
+}) {
+  return (
+    <div className="flex flex-col justify-between">
+      <label htmlFor="color-input" className="inline-flex items-center">
+        {label}
+      </label>
+      <input
+        type="range"
+        id="lint-width-input"
+        name="lint-width-input"
+        className="cursor-pointer"
+        min={min}
+        max={max}
+        onChange={onChange}
+        defaultValue={defaultValue}
+      />
+    </div>
+  );
+}
+
 const Toolbar = observer(function ({ className }: { className?: string }) {
+  const tool = toolState.tool;
+  const isImageTool = tool && tool instanceof ImageTool;
+
   const handleStrokeColorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => toolState.setStrokeColor(e.target.value),
     [],
@@ -62,6 +98,16 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
   const handleLineWidthChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => toolState.setLineWidth(Number(e.target.value)),
     [],
+  );
+
+  const handleBlurRadiusChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageTool) {
+        tool.setBlurRadius(Number(e.target.value));
+      }
+    },
+    [tool, isImageTool],
   );
 
   return (
@@ -78,21 +124,24 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         </label>
         <ColorInput id="background-color-input" onChange={handleFillColorChange} defaultValue={toolState.fillColor} />
       </div>
-      <div className="flex flex-col justify-between">
-        <label htmlFor="color-input" className="inline-flex items-center">
-          Line width
-        </label>
-        <input
-          type="range"
-          id="lint-width-input"
-          name="lint-width-input"
-          className="cursor-pointer"
-          min="1"
-          max="50"
-          onChange={handleLineWidthChange}
-          defaultValue={toolState.lineWidth}
-        />
-      </div>
+      <RangeInput
+        min={1}
+        max={50}
+        label="Line width"
+        onChange={handleLineWidthChange}
+        defaultValue={toolState.lineWidth}
+      />
+      {isImageTool && (
+        <div className="flex flex-col gap-3">
+          <RangeInput
+            min={0}
+            max={20}
+            label="Image blur radius"
+            onChange={handleBlurRadiusChange}
+            defaultValue={tool.blurRadius}
+          />
+        </div>
+      )}
     </aside>
   );
 });

@@ -10,6 +10,10 @@ class CanvasState {
     this.selectedShapeId = -1;
   }
 
+  getShape(id: number) {
+    return this.undoList.find(s => s.id === id);
+  }
+
   setSelectedShape(id: number) {
     this.selectedShapeId = id;
   }

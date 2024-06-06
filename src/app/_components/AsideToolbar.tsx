@@ -6,7 +6,7 @@ import { BsAspectRatio, BsCrop, BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { canvasState, toolState } from '@store';
 import { cn } from '@/utils/cn';
-import { ImageProcessingMode, ImageTool } from '../_tools';
+import { ImageProcessingMode, ImageTool, ImageType, ShapeEnum } from '../_tools';
 
 function ColorInput({
   id,
@@ -148,17 +148,90 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         </label>
         <input
           type="range"
-          id="lint-width-input"
-          name="lint-width-input"
+          id="image-crop-width-input"
+          name="image-crop-width-input"
           className="cursor-pointer"
-          min="1"
-          max="50"
-          // onChange={e => {
-          //   canvasState.updateShape(canvasState.selectedShapeId, {
-          //     cropWidth: Number(e.target.value);
-          //   });
-          // }}
-          defaultValue={toolState.lineWidth}
+          min="100"
+          max="1000"
+          onChange={e => {
+            const shape = canvasState.getShape(canvasState.selectedShapeId);
+
+            if (shape && shape.type === ShapeEnum.IMAGE) {
+              canvasState.updateShape(canvasState.selectedShapeId, {
+                cropWidth: Number(e.target.value),
+              } as ImageType);
+            }
+          }}
+          defaultValue={10}
+        />
+      </div>
+      <div className="flex flex-col justify-between">
+        <label htmlFor="color-input" className="inline-flex items-center">
+          Image crop height
+        </label>
+        <input
+          type="range"
+          id="image-crop-height-input"
+          name="image-crop-height-input"
+          className="cursor-pointer"
+          min="100"
+          max="1000"
+          onChange={e => {
+            const shape = canvasState.getShape(canvasState.selectedShapeId);
+
+            if (shape && shape.type === ShapeEnum.IMAGE) {
+              canvasState.updateShape(canvasState.selectedShapeId, {
+                cropHeight: Number(e.target.value),
+              } as ImageType);
+            }
+          }}
+          defaultValue={10}
+        />
+      </div>
+      <div className="flex flex-col justify-between">
+        <label htmlFor="color-input" className="inline-flex items-center">
+          Image crop x
+        </label>
+        <input
+          type="range"
+          id="image-crop-x-input"
+          name="image-crop-x-input"
+          className="cursor-pointer"
+          min="100"
+          max="1000"
+          onChange={e => {
+            const shape = canvasState.getShape(canvasState.selectedShapeId);
+
+            if (shape && shape.type === ShapeEnum.IMAGE) {
+              canvasState.updateShape(canvasState.selectedShapeId, {
+                cropX: Number(e.target.value),
+              } as ImageType);
+            }
+          }}
+          defaultValue={10}
+        />
+      </div>
+      <div className="flex flex-col justify-between">
+        <label htmlFor="color-input" className="inline-flex items-center">
+          Image crop y
+        </label>
+        <input
+          type="range"
+          id="image-crop-y-input"
+          name="image-crop-y-input"
+          className="cursor-pointer"
+          min="100"
+          max="1000"
+          onChange={e => {
+            const shape = canvasState.getShape(canvasState.selectedShapeId);
+
+            if (shape && shape.type === ShapeEnum.IMAGE) {
+              canvasState.updateShape(canvasState.selectedShapeId, {
+                cropY: Number(e.target.value),
+              } as ImageType);
+            }
+          }}
+          defaultValue={10}
         />
       </div>
     </aside>

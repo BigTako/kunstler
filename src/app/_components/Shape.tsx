@@ -167,6 +167,8 @@ function TransformableImage(props: TransformableImageProps) {
     } as ImageType);
   };
 
+  console.log({ cropX, cropY, cropWidth, cropHeight });
+
   return (
     <Transformable
       {...TransformableProps}
@@ -204,7 +206,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     }
   };
 
-  console.log({ selectedShape: canvasState.selectedShapeId });
+  // console.log({ selectedShape: canvasState.selectedShapeId });
 
   const draggable = toolState.tool instanceof Palm;
 

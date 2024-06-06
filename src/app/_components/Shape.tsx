@@ -1,77 +1,23 @@
 import React, { useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Line, Ellipse, Image } from 'react-konva';
-import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { Line } from 'react-konva';
+import { EllipseType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
-import Konva from 'konva';
 import dynamic from 'next/dynamic';
-import useImage from 'use-image';
 
-const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 const ScalableRect = dynamic(() => import('./ScalableRect'), { ssr: false });
 const ScalableEllipse = dynamic(() => import('./ScalableEllipse'), { ssr: false });
-
-interface ScalableImageProps {
-  id: number;
-  isSelected: boolean;
-  onSelect: () => void;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  src: string;
-  draggable: boolean;
-}
-
-// function ScalableImage(props: ScalableImageProps) {
-//   const { id, x, y, height, width, draggable, src, ...scalableProps } = props;
-
-//   const [image, status] = useImage(src);
-
-//   if (status !== 'loaded') {
-//     return null;
-//   }
-
-//   return (
-//     <Scalable
-//       {...scalableProps}
-//       scale={node => {
-//         const scaleX = node.scaleX();
-//         const scaleY = node.scaleY();
-//         const scaledWidth = Math.max(5, node.width() * scaleX);
-//         const scaledHeight = Math.max(5, node.height() * scaleY);
-//         canvasState.updateShape(id, {
-//           x: node.x(),
-//           y: node.y(),
-//           width: scaledWidth,
-//           height: scaledHeight,
-//         } as ImageType);
-//       }}
-//     >
-//       <Image
-//         draggable={draggable}
-//         onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
-//           canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
-//         }}
-//         x={x}
-//         y={y}
-//         width={width}
-//         height={height}
-//         alt={`Uploaded image with ${id}`}
-//         image={image}
-//       />
-//     </Scalable>
-//   );
-// }
 
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   const [selectedId, setSelectedId] = React.useState(-1);
 
   const handleSelect = (id: number) => {
     if (selectedId === id) {
+      canvasState.selectShape(-1);
       setSelectedId(-1);
     } else {
+      canvasState.selectShape(id);
       setSelectedId(id);
     }
   };

@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { canvasState } from '@store';
 import { EllipseType } from '@tools';
 import { Ellipse } from 'react-konva';
+import Konva from 'konva';
 
 const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 

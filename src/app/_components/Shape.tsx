@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { Line, Image, Transformer } from 'react-konva';
 import { EllipseType, ImageTool, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
-import Konva from 'konva';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
 import { observable } from 'mobx';
+import Konva from 'konva';
 
 // const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 const ScalableRect = dynamic(() => import('./ScalableRect'), { ssr: false });
@@ -94,8 +94,10 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
 
   const handleSelect = (id: number) => {
     if (selectedId === id) {
+      canvasState.selectShape(-1);
       setSelectedId(-1);
     } else {
+      canvasState.selectShape(id);
       setSelectedId(id);
     }
   };

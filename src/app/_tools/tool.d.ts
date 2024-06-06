@@ -45,6 +45,10 @@ export interface ImageType extends ShapeType {
   y: number;
   width: number;
   height: number;
+  cropX: number;
+  cropY: number;
+  cropWidth: number;
+  cropHeight: number;
   src: string;
 }
 

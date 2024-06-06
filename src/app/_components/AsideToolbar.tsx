@@ -4,7 +4,7 @@ import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'r
 import { observer } from 'mobx-react-lite';
 import { BsAspectRatio, BsCrop, BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
-import { toolState } from '@store';
+import { canvasState, toolState } from '@store';
 import { cn } from '@/utils/cn';
 import { ImageProcessingMode, ImageTool } from '../_tools';
 
@@ -59,7 +59,6 @@ const imageProcessingOptions = [
       if (tool && tool instanceof ImageTool) {
         tool.setMode(ImageProcessingMode.RESIZE);
       }
-      // toolState.setTool(new Palm());
     },
   },
   {
@@ -142,6 +141,25 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
             </SquareButton>
           ))}
         </div>
+      </div>
+      <div className="flex flex-col justify-between">
+        <label htmlFor="color-input" className="inline-flex items-center">
+          Image crop width
+        </label>
+        <input
+          type="range"
+          id="lint-width-input"
+          name="lint-width-input"
+          className="cursor-pointer"
+          min="1"
+          max="50"
+          // onChange={e => {
+          //   canvasState.updateShape(canvasState.selectedShapeId, {
+          //     cropWidth: Number(e.target.value);
+          //   });
+          // }}
+          defaultValue={toolState.lineWidth}
+        />
       </div>
     </aside>
   );

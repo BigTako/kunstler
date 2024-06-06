@@ -4,7 +4,7 @@ import Konva from 'konva';
 import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
 
-function Scalable<T extends Konva.Shape>({
+function Transformable<T extends Konva.Shape>({
   isSelected,
   onSelect,
   scale,
@@ -59,4 +59,4 @@ function Scalable<T extends Konva.Shape>({
   );
 }
 
-export default Scalable;
+export default Transformable;

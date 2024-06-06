@@ -5,7 +5,6 @@ import { canvasState } from '@store';
 
 export class ImageTool implements Tool {
   mode: ImageProcessingMode;
-  // isDrawing: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -36,6 +35,10 @@ export class ImageTool implements Tool {
             y,
             width: imgWidth,
             height: imgHeight,
+            cropX: 0,
+            cropY: 0,
+            cropWidth: 0,
+            cropHeight: 0,
           } as ImageType);
         };
       };

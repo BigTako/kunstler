@@ -4,9 +4,14 @@ import { ShapeType } from '@tools';
 class CanvasState {
   undoList: ShapeType[] = [];
   redoList: ShapeType[] = [];
-
+  selectedShapeId: number;
   constructor() {
     makeAutoObservable(this);
+    this.selectedShapeId = -1;
+  }
+
+  setSelectedShape(id: number) {
+    this.selectedShapeId = id;
   }
 
   undo() {

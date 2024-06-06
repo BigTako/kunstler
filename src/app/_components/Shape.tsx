@@ -2,15 +2,16 @@ import React, { useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Rect, Line, Ellipse, Image } from 'react-konva';
-import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { EllipseType, ImageTool, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import Konva from 'konva';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
+// import { Shape, ShapeConfig } from 'konva/lib/Shape';
 
-const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
+const Transformable = dynamic(() => import('./Transformable'), { ssr: false });
 
-interface ScalableRectProps {
+interface TransformableRectProps {
   id: number;
   isSelected: boolean;
   onSelect: () => void;
@@ -24,12 +25,12 @@ interface ScalableRectProps {
   draggable: boolean;
 }
 
-function ScalableRect(props: ScalableRectProps) {
-  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable, ...scalableProps } = props;
+function TransformableRect(props: TransformableRectProps) {
+  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable, ...TransformableProps } = props;
 
   return (
-    <Scalable
-      {...scalableProps}
+    <Transformable
+      {...TransformableProps}
       scale={node => {
         const scaleX = node.scaleX();
         const scaleY = node.scaleY();
@@ -56,11 +57,11 @@ function ScalableRect(props: ScalableRectProps) {
           canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as RectType);
         }}
       />
-    </Scalable>
+    </Transformable>
   );
 }
 
-interface ScalableEllipseProps {
+interface TransformableEllipseProps {
   id: number;
   isSelected: boolean;
   onSelect: () => void;
@@ -74,11 +75,11 @@ interface ScalableEllipseProps {
   draggable: boolean;
 }
 
-function ScalableEllipse(props: ScalableEllipseProps) {
-  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable, ...scalableProps } = props;
+function TransformableEllipse(props: TransformableEllipseProps) {
+  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable, ...TransformableProps } = props;
   return (
-    <Scalable
-      {...scalableProps}
+    <Transformable
+      {...TransformableProps}
       scale={node => {
         const scaleX = node.scaleX();
         const scaleY = node.scaleY();
@@ -105,11 +106,11 @@ function ScalableEllipse(props: ScalableEllipseProps) {
           canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
         }}
       />
-    </Scalable>
+    </Transformable>
   );
 }
 
-interface ScalableImageProps {
+interface TransformableImageProps {
   id: number;
   isSelected: boolean;
   onSelect: () => void;
@@ -117,12 +118,16 @@ interface ScalableImageProps {
   y: number;
   width: number;
   height: number;
+  cropX: number;
+  cropY: number;
+  cropWidth: number;
+  cropHeight: number;
   src: string;
   draggable: boolean;
 }
 
-function ScalableImage(props: ScalableImageProps) {
-  const { id, x, y, height, width, draggable, src, ...scalableProps } = props;
+function TransformableImage(props: TransformableImageProps) {
+  const { id, x, y, height, width, draggable, cropX, cropY, cropHeight, cropWidth, src, ...TransformableProps } = props;
 
   const [image, status] = useImage(src);
 
@@ -130,20 +135,43 @@ function ScalableImage(props: ScalableImageProps) {
     return null;
   }
 
+  const handleScale = (node: Konva.Shape) => {
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+    const scaledWidth = Math.max(5, node.width() * scaleX);
+    const scaledHeight = Math.max(5, node.height() * scaleY);
+    canvasState.updateShape(id, {
+      x: node.x(),
+      y: node.y(),
+      width: scaledWidth,
+      height: scaledHeight,
+    } as ImageType);
+  };
+
+  const handleCrop = (node: Konva.Shape) => {
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+    const scaledWidth = Math.max(5, node.width() * scaleX);
+    const scaledHeight = Math.max(5, node.height() * scaleY);
+
+    const cropX = Math.max(0, node.x() - x);
+    const cropY = Math.max(0, node.y() - y);
+    const cropWidth = Math.min(width, scaledWidth);
+    const cropHeight = Math.min(height, scaledHeight);
+
+    canvasState.updateShape(id, {
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
+    } as ImageType);
+  };
+
   return (
-    <Scalable
-      {...scalableProps}
+    <Transformable
+      {...TransformableProps}
       scale={node => {
-        const scaleX = node.scaleX();
-        const scaleY = node.scaleY();
-        const scaledWidth = Math.max(5, node.width() * scaleX);
-        const scaledHeight = Math.max(5, node.height() * scaleY);
-        canvasState.updateShape(id, {
-          x: node.x(),
-          y: node.y(),
-          width: scaledWidth,
-          height: scaledHeight,
-        } as ImageType);
+        handleScale(node);
       }}
     >
       <Image
@@ -153,12 +181,13 @@ function ScalableImage(props: ScalableImageProps) {
         }}
         x={x}
         y={y}
+        crop={{ x: cropX, y: cropY, width: cropWidth, height: cropHeight }}
         width={width}
         height={height}
         alt={`Uploaded image with ${id}`}
         image={image}
       />
-    </Scalable>
+    </Transformable>
   );
 }
 
@@ -167,11 +196,15 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
 
   const handleSelect = (id: number) => {
     if (selectedId === id) {
+      canvasState.setSelectedShape(-1);
       setSelectedId(-1);
     } else {
+      canvasState.setSelectedShape(id);
       setSelectedId(id);
     }
   };
+
+  console.log({ selectedShape: canvasState.selectedShapeId });
 
   const draggable = toolState.tool instanceof Palm;
 
@@ -198,7 +231,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     let { id, x, y, width, height, fillColor, strokeColor, lineWidth: strokeWidth } = shape as RectType;
 
     return (
-      <ScalableRect
+      <TransformableRect
         id={id}
         x={x}
         y={y}
@@ -216,7 +249,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
   if (shape.type === ShapeEnum.ELLIPSE) {
     let { id, x, y, radiusX, radiusY, fillColor, strokeColor, lineWidth: strokeWidth } = shape as EllipseType;
     return (
-      <ScalableEllipse
+      <TransformableEllipse
         id={id}
         x={x}
         y={y}
@@ -232,14 +265,18 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     );
   }
   if (shape.type === ShapeEnum.IMAGE) {
-    const { id, x, y, width, height, src } = shape as ImageType;
+    const { id, x, y, width, height, cropX, cropY, cropHeight, cropWidth, src } = shape as ImageType;
     return (
-      <ScalableImage
+      <TransformableImage
         id={id}
         x={x}
         y={y}
         width={width}
         height={height}
+        cropX={cropX}
+        cropY={cropY}
+        cropHeight={cropHeight}
+        cropWidth={cropWidth}
         src={src}
         draggable={draggable ? id === selectedId : false}
         isSelected={selectedId === id}

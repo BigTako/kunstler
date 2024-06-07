@@ -1,4 +1,4 @@
-import React, { LegacyRef, useEffect, useRef } from 'react';
+import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Line, Image, Transformer } from 'react-konva';
@@ -88,7 +88,7 @@ function FilterImage(props: ScalableImageProps) {
 }
 
 const Shape = observer(function ({ shape }: { shape: ShapeType }) {
-  const [selectedId, setSelectedId] = React.useState(-1);
+  const [selectedId, setSelectedId] = useState(-1);
 
   const handleSelect = (id: number) => {
     if (selectedId === id) {
@@ -104,6 +104,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
 
   useEffect(() => {
     if (!draggable) {
+      canvasState.selectShape(-1);
       setSelectedId(-1);
     }
   }, [draggable]);

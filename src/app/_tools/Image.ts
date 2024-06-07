@@ -4,14 +4,9 @@ import { ImageType } from '@tools';
 import { canvasState } from '@store';
 
 export class ImageTool implements Tool {
-  isDrawing: boolean = false;
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
   }
-
-  // setBlurRadius(value: number) {
-  //   this.blurRadius = value;
-  // }
 
   upload(file: File) {
     const reader = new FileReader();

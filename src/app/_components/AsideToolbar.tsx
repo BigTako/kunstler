@@ -107,12 +107,32 @@ function ImageFiltersMenuToolbar() {
     [isImageSelected, selectedShape?.id],
   );
 
+  const handleContrastChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageSelected) {
+        canvasState.updateShape(selectedShape.id, { contrast: Number(e.target.value) } as ImageType);
+      }
+    },
+    [isImageSelected, selectedShape?.id],
+  );
+
+  const handleNoiseChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageSelected) {
+        canvasState.updateShape(selectedShape.id, { noise: Number(e.target.value) } as ImageType);
+      }
+    },
+    [isImageSelected, selectedShape?.id],
+  );
+
   return (
     <div className="flex flex-col gap-3">
       <RangeInput
         min={0}
         max={20}
-        label="Image blur radius"
+        label="Blur radius"
         onChange={handleBlurRadiusChange}
         defaultValue={selectedShape?.blurRadius ?? 0}
       />
@@ -125,12 +145,19 @@ function ImageFiltersMenuToolbar() {
         defaultValue={selectedShape?.brightness ?? 0}
       />
       <RangeInput
-        min={-1}
-        max={1}
-        label="Grayscale"
+        min={-100}
+        max={100}
+        label="Contrast"
+        onChange={handleContrastChange}
+        defaultValue={selectedShape?.contrast ?? 0}
+      />
+      <RangeInput
+        min={0}
+        max={2}
         step="0.001"
-        onChange={handleBrightnessChange}
-        defaultValue={selectedShape?.grayscale ?? 0}
+        label="Noise"
+        onChange={handleNoiseChange}
+        defaultValue={selectedShape?.noise ?? 0}
       />
     </div>
   );

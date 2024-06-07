@@ -16,12 +16,12 @@ interface ShapePropsType {
 
 const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
   if (shape.type === ShapeEnum.LINE) {
-    let { points, strokeColor, lineWidth } = shape as LineType;
+    let { points, strokeColor, strokeWidth } = shape as LineType;
     return (
       <Line
         points={points}
         stroke={strokeColor}
-        strokeWidth={lineWidth}
+        strokeWidth={strokeWidth}
         tension={0.5}
         lineCap="round"
         lineJoin="round"
@@ -29,57 +29,13 @@ const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
     );
   }
   if (shape.type === ShapeEnum.RECT) {
-    let { id, x, y, width, height, fillColor, strokeColor, lineWidth: strokeWidth } = shape as RectType;
-
-    return (
-      <ScalableRect
-        id={id}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        fill={fillColor as string}
-        stroke={strokeColor as string}
-        strokeWidth={strokeWidth as number}
-        draggable={draggable}
-      />
-    );
+    return <ScalableRect shape={shape as RectType} draggable={draggable} />;
   }
   if (shape.type === ShapeEnum.ELLIPSE) {
-    let { id, x, y, radiusX, radiusY, fillColor, strokeColor, lineWidth: strokeWidth } = shape as EllipseType;
-    return (
-      <ScalableEllipse
-        id={id}
-        x={x}
-        y={y}
-        radiusX={radiusX}
-        radiusY={radiusY}
-        fill={fillColor}
-        stroke={strokeColor as string}
-        strokeWidth={strokeWidth as number}
-        draggable={draggable}
-      />
-    );
+    return <ScalableEllipse shape={shape as EllipseType} draggable={draggable} />;
   }
   if (shape.type === ShapeEnum.IMAGE) {
-    // const { id, x, y, height, width, src, draggable } = shape as ImageType;
-    return (
-      <ScalableImage
-        draggable={draggable}
-        shape={shape as ImageType}
-        // id={id}
-        // x={x}
-        // y={y}
-        // height={height}
-        // width={width}
-        // src={src}
-        // draggable={draggable}
-        // blurRadius={blurRadius}
-        // brightness={brightness}
-        // contrast={contrast}
-        // noise={noise}
-      />
-    );
+    return <ScalableImage draggable={draggable} shape={shape as ImageType} />;
   }
 });
 

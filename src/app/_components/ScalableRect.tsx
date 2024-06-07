@@ -6,22 +6,10 @@ import { Rect } from 'react-konva';
 import Konva from 'konva';
 import { Shape as KonvaShape, ShapeConfig as KonvaShapeConfig } from 'konva/lib/Shape';
 
-interface ScalableRectProps {
-  id: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  fill: string;
-  stroke: string;
-  strokeWidth: number;
-  draggable: boolean;
-}
-
 const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
-function ScalableRect(props: ScalableRectProps) {
-  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable } = props;
+function ScalableRect({ shape, draggable }: { shape: RectType; draggable: boolean }) {
+  const { id, x, y, strokeColor, strokeWidth, fillColor, width, height } = shape;
 
   const handleScale = useCallback(
     (node: KonvaShape<KonvaShapeConfig>) => {
@@ -29,14 +17,14 @@ function ScalableRect(props: ScalableRectProps) {
       const scaleY = node.scaleY();
       const scaledWidth = Math.max(5, node.width() * scaleX);
       const scaledHeight = Math.max(5, node.height() * scaleY);
-      canvasState.updateShape(props.id, {
+      canvasState.updateShape(id, {
         x: node.x(),
         y: node.y(),
         width: scaledWidth,
         height: scaledHeight,
       } as RectType);
     },
-    [props.id],
+    [id],
   );
 
   return (
@@ -44,9 +32,9 @@ function ScalableRect(props: ScalableRectProps) {
       <Rect
         x={x}
         y={y}
-        stroke={stroke}
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
-        fill={fill}
+        fill={fillColor}
         width={width}
         height={height}
         draggable={draggable}

@@ -17,9 +17,9 @@ export class Brush implements Tool {
     canvasState.addShape({
       type: 'line',
       strokeColor: toolState.strokeColor,
-      lineWidth: toolState.lineWidth,
+      strokeWidth: toolState.strokeWidth,
       points: [pos.x, pos.y],
-    } as LineType);
+    } as Omit<LineType, 'id'>);
   }
 
   private addPoint(pos: { x: number; y: number }) {

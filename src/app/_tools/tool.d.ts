@@ -12,7 +12,7 @@ export enum ShapeEnum {
 export interface ShapeType {
   id: number;
   type: ShapeEnum;
-  lineWidth?: number;
+  strokeWidth?: number;
   strokeColor?: string;
   fillColor?: string;
 }

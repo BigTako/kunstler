@@ -25,12 +25,12 @@ export class Ellipse implements Tool {
           type: ShapeEnum.ELLIPSE,
           fillColor: toolState.fillColor,
           strokeColor: toolState.strokeColor,
-          lineWidth: toolState.lineWidth,
+          strokeWidth: toolState.strokeWidth,
           x: pos.x,
           y: pos.y,
           radiusX: 0,
           radiusY: 0,
-        } as EllipseType);
+        } as Omit<EllipseType, 'id'>);
       }
     }
   }

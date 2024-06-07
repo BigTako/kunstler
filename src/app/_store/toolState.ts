@@ -5,12 +5,12 @@ class ToolState {
   tool = null as Tool | null;
   strokeColor: string;
   fillColor: string;
-  lineWidth: number;
+  strokeWidth: number;
   constructor() {
     makeAutoObservable(this);
     this.fillColor = '#000';
     this.strokeColor = '#000';
-    this.lineWidth = 1;
+    this.strokeWidth = 1;
   }
 
   setTool(tool: Tool | null) {
@@ -26,7 +26,7 @@ class ToolState {
   }
 
   setLineWidth(width: number) {
-    this.lineWidth = width;
+    this.strokeWidth = width;
   }
 }
 

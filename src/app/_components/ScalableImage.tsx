@@ -37,10 +37,8 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
     [isSelected],
   );
 
-  // when image is loaded we need to cache the shape
   useEffect(() => {
     if (image) {
-      // you many need to reapply cache on some props changes like shadow, stroke, etc.
       if (imageRef.current) {
         imageRef.current.cache();
       }

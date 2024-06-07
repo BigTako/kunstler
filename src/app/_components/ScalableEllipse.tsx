@@ -19,8 +19,8 @@ interface ScalableEllipseProps {
   draggable: boolean;
 }
 
-function ScalableEllipse(props: ScalableEllipseProps) {
-  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable } = props;
+function ScalableEllipse({ shape, draggable }: { shape: EllipseType; draggable: boolean }) {
+  const { id, x, y, fillColor, strokeWidth, strokeColor, radiusX, radiusY } = shape;
   return (
     <Scalable
       shapeId={id}
@@ -40,9 +40,9 @@ function ScalableEllipse(props: ScalableEllipseProps) {
       <Ellipse
         x={x}
         y={y}
-        stroke={stroke}
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
-        fill={fill}
+        fill={fillColor}
         radiusX={radiusX}
         radiusY={radiusY}
         draggable={draggable}

@@ -17,9 +17,9 @@ export class Line implements Tool {
     canvasState.addShape({
       type: ShapeEnum.LINE,
       strokeColor: toolState.strokeColor,
-      lineWidth: toolState.lineWidth,
+      strokeWidth: toolState.strokeWidth,
       points: [pos.x, pos.y, pos.x, pos.y],
-    } as LineType);
+    } as Omit<LineType, 'id'>);
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {

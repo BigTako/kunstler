@@ -32,7 +32,7 @@ export class ImageTool implements Tool {
             brightness: 0,
             contrast: 0,
             noise: 0,
-          } as ImageType);
+          } as Omit<ImageType, 'id'>);
         };
       };
     };

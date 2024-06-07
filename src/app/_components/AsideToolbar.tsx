@@ -202,7 +202,7 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         max={50}
         label="Line width"
         onChange={handleLineWidthChange}
-        defaultValue={toolState.lineWidth}
+        defaultValue={toolState.strokeWidth}
       />
 
       {openImageToolbar && <ImageFiltersMenuToolbar />}

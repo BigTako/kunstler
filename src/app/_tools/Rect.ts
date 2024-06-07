@@ -24,12 +24,12 @@ export class Rect implements Tool {
           type: ShapeEnum.RECT,
           fillColor: toolState.fillColor,
           strokeColor: toolState.strokeColor,
-          lineWidth: toolState.lineWidth,
+          strokeWidth: toolState.strokeWidth,
           x: pos.x,
           y: pos.y,
           width: 0,
           height: 0,
-        } as RectType);
+        } as Omit<RectType, 'id'>);
       }
     }
   }

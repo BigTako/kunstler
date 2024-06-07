@@ -6,8 +6,10 @@ import { EllipseType, ImageType, LineType, RectType, ShapeEnum, ShapeType } from
 import { canvasState } from '@store';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
+import { Shape as KonvaShape, ShapeConfig as KonvaShapeConfig } from 'konva/lib/Shape';
 import Konva from 'konva';
 
+const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 const ScalableRect = dynamic(() => import('./ScalableRect'), { ssr: false });
 const ScalableEllipse = dynamic(() => import('./ScalableEllipse'), { ssr: false });
 
@@ -21,6 +23,46 @@ interface ScalableImageProps {
   blurRadius: number;
   src: string;
 }
+
+const ScalableImage = observer(function (props: ScalableImageProps) {
+  const { id, x, y, width, height, src, blurRadius, draggable } = props;
+  const [image] = useImage(src, 'anonymous');
+
+  const handleScale = useCallback(
+    (node: KonvaShape<KonvaShapeConfig>) => {
+      const scaleX = node.scaleX();
+      const scaleY = node.scaleY();
+      const scaledWidth = Math.max(5, node.width() * scaleX);
+      const scaledHeight = Math.max(5, node.height() * scaleY);
+      canvasState.updateShape(props.id, {
+        x: node.x(),
+        y: node.y(),
+        width: scaledWidth,
+        height: scaledHeight,
+      } as RectType);
+    },
+    [props.id],
+  );
+
+  return (
+    <Scalable shapeId={id} scale={handleScale}>
+      <Image
+        alt={`Uploaded image with ${id}`}
+        draggable={draggable}
+        onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
+          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as EllipseType);
+        }}
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        image={image}
+        filters={[Konva.Filters.Blur]}
+        blurRadius={blurRadius}
+      />
+    </Scalable>
+  );
+});
 
 const FilterImage = observer(function (props: ScalableImageProps) {
   const { id, x, y, width, height, draggable, src, blurRadius } = props;
@@ -151,7 +193,7 @@ const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
   if (shape.type === ShapeEnum.IMAGE) {
     const { id, x, y, width, height, blurRadius, src } = shape as ImageType;
     return (
-      <FilterImage
+      <ScalableImage
         id={id}
         x={x}
         y={y}

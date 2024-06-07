@@ -41,11 +41,6 @@ const Scalable = observer(function <T extends Konva.Shape>({
         const tr = trRef.current;
         tr.nodes([shapeRef.current as T]);
         tr.getLayer()?.batchDraw();
-        // shapeRef.current?.cache();
-        // const curShape = canvasState.selectedShape;
-        // if (curShape && curShape.type === 'image') {
-        //   shapeRef.current?.cache();
-        // }
       }
     }
   }, [isSelected, shapeRef]);

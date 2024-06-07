@@ -87,28 +87,17 @@ function FilterImage(props: ScalableImageProps) {
   );
 }
 
-const Shape = observer(function ({ shape }: { shape: ShapeType }) {
-  const [selectedId, setSelectedId] = useState(-1);
-
-  const handleSelect = (id: number) => {
-    if (selectedId === id) {
-      canvasState.selectShape(-1);
-      setSelectedId(-1);
-    } else {
-      canvasState.selectShape(id);
-      setSelectedId(id);
-    }
-  };
-
-  const draggable = toolState.tool instanceof Palm;
-
-  useEffect(() => {
-    if (!draggable) {
-      canvasState.selectShape(-1);
-      setSelectedId(-1);
-    }
-  }, [draggable]);
-
+const Shape = observer(function ({
+  shape,
+  isSelected,
+  onSelect,
+  draggable,
+}: {
+  shape: ShapeType;
+  isSelected: boolean;
+  onSelect: () => void;
+  draggable: boolean;
+}) {
   if (shape.type === ShapeEnum.LINE) {
     let { points, strokeColor, lineWidth } = shape as LineType;
     return (
@@ -132,12 +121,12 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         y={y}
         width={width}
         height={height}
-        draggable={draggable}
         fill={fillColor as string}
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
-        isSelected={draggable ? id === selectedId : false}
-        onSelect={() => handleSelect(id)}
+        draggable={draggable}
+        isSelected={isSelected}
+        onSelect={onSelect}
       />
     );
   }
@@ -153,9 +142,9 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         fill={fillColor}
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
-        draggable={draggable ? id === selectedId : false}
-        isSelected={id === selectedId}
-        onSelect={() => handleSelect(id)}
+        draggable={draggable}
+        isSelected={isSelected}
+        onSelect={onSelect}
       />
     );
   }
@@ -170,8 +159,8 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         width={width}
         src={src}
         draggable={draggable}
-        isSelected={id === selectedId}
-        onSelect={() => handleSelect(id)}
+        isSelected={isSelected}
+        onSelect={onSelect}
         blurRadius={blurRadius}
       />
     );

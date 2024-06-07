@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { canvasState } from '@store';
 import { RectType } from '@tools';
 import { Rect } from 'react-konva';
 import Konva from 'konva';
+import { Shape as KonvaShape, ShapeConfig as KonvaShapeConfig } from 'konva/lib/Shape';
 
 interface ScalableRectProps {
   id: number;
-  // isSelected: boolean;
-  // onSelect: () => void;
   x: number;
   y: number;
   width: number;
@@ -24,22 +23,24 @@ const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 function ScalableRect(props: ScalableRectProps) {
   const { id, x, y, stroke, strokeWidth, fill, width, height, draggable } = props;
 
+  const handleScale = useCallback(
+    (node: KonvaShape<KonvaShapeConfig>) => {
+      const scaleX = node.scaleX();
+      const scaleY = node.scaleY();
+      const scaledWidth = Math.max(5, node.width() * scaleX);
+      const scaledHeight = Math.max(5, node.height() * scaleY);
+      canvasState.updateShape(props.id, {
+        x: node.x(),
+        y: node.y(),
+        width: scaledWidth,
+        height: scaledHeight,
+      } as RectType);
+    },
+    [props.id],
+  );
+
   return (
-    <Scalable
-      shapeId={id}
-      scale={node => {
-        const scaleX = node.scaleX();
-        const scaleY = node.scaleY();
-        const scaledWidth = Math.max(5, node.width() * scaleX);
-        const scaledHeight = Math.max(5, node.height() * scaleY);
-        canvasState.updateShape(props.id, {
-          x: node.x(),
-          y: node.y(),
-          width: scaledWidth,
-          height: scaledHeight,
-        } as RectType);
-      }}
-    >
+    <Scalable shapeId={id} scale={handleScale}>
       <Rect
         x={x}
         y={y}

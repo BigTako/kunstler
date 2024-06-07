@@ -5,7 +5,6 @@ class CanvasState {
   undoList: ShapeType[] = [];
   redoList: ShapeType[] = [];
   selectedShape: ShapeType | null = null;
-  // selectedShapeId: number = -1;
 
   constructor() {
     makeAutoObservable(this);

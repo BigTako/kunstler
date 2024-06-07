@@ -3,8 +3,9 @@
 import Konva from 'konva';
 import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useCallback, useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
-import { canvasState } from '../_store';
+import { canvasState, toolState } from '../_store';
 import { observer } from 'mobx-react-lite';
+import { Palm } from '../_tools';
 
 const Scalable = observer(function <T extends Konva.Shape>({
   shapeId,
@@ -20,17 +21,18 @@ const Scalable = observer(function <T extends Konva.Shape>({
 
   const isSelected = shapeId === canvasState.selectedShape?.id;
 
+  const isSelectable = toolState.tool instanceof Palm;
+
   const handleSelect = useCallback(
     (id: number) => {
+      if (!isSelectable) return;
       if (isSelected) {
         canvasState.selectShape(-1);
-        // setSelectedId(-1);
       } else {
         canvasState.selectShape(id);
-        // setSelectedId(id);
       }
     },
-    [isSelected, shapeId],
+    [isSelected, isSelectable],
   );
 
   useEffect(() => {
@@ -48,8 +50,6 @@ const Scalable = observer(function <T extends Konva.Shape>({
       {cloneElement(children as ReactElement, {
         onClick: () => handleSelect(shapeId),
         onTap: () => handleSelect(shapeId),
-        // onClick: onSelect,
-        // onTap: onSelect,
         ref: shapeRef as LegacyRef<T>,
         onTransformEnd: () => {
           const node = shapeRef.current;

@@ -8,7 +8,6 @@ import dynamic from 'next/dynamic';
 import useImage from 'use-image';
 import Konva from 'konva';
 
-// const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 const ScalableRect = dynamic(() => import('./ScalableRect'), { ssr: false });
 const ScalableEllipse = dynamic(() => import('./ScalableEllipse'), { ssr: false });
 
@@ -97,7 +96,12 @@ const FilterImage = observer(function (props: ScalableImageProps) {
   );
 });
 
-const Shape = observer(function ({ shape, draggable }: { shape: ShapeType; draggable: boolean }) {
+interface ShapePropsType {
+  shape: ShapeType;
+  draggable: boolean;
+}
+
+const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
   if (shape.type === ShapeEnum.LINE) {
     let { points, strokeColor, lineWidth } = shape as LineType;
     return (

@@ -6,12 +6,9 @@ import { canvasState } from '../_store';
 import Konva from 'konva';
 import { Image, Transformer } from 'react-konva';
 import { ImageType } from '../_tools';
-import { ScalableProps } from './component';
 
-type ScalableImageProps = ScalableProps & Omit<ImageType, 'type'>;
-
-const ScalableImage = observer(function (props: ScalableImageProps) {
-  const { id, x, y, width, height, draggable, src, blurRadius, brightness, contrast } = props;
+const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
+  const { id, x, y, width, height, src, blurRadius, brightness, contrast, noise } = shape;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -65,10 +62,11 @@ const ScalableImage = observer(function (props: ScalableImageProps) {
         width={width}
         height={height}
         image={image}
-        filters={[Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Contrast]}
+        filters={[Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Noise]}
         blurRadius={blurRadius}
         brightness={brightness}
         contrast={contrast}
+        noise={noise}
       />
       {isSelected && (
         <Transformer

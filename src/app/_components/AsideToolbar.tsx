@@ -117,6 +117,16 @@ function ImageFiltersMenuToolbar() {
     [isImageSelected, selectedShape?.id],
   );
 
+  const handleNoiseChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageSelected) {
+        canvasState.updateShape(selectedShape.id, { noise: Number(e.target.value) } as ImageType);
+      }
+    },
+    [isImageSelected, selectedShape?.id],
+  );
+
   return (
     <div className="flex flex-col gap-3">
       <RangeInput
@@ -140,6 +150,14 @@ function ImageFiltersMenuToolbar() {
         label="Contrast"
         onChange={handleContrastChange}
         defaultValue={selectedShape?.contrast ?? 0}
+      />
+      <RangeInput
+        min={0}
+        max={2}
+        step="0.001"
+        label="Noise"
+        onChange={handleNoiseChange}
+        defaultValue={selectedShape?.noise ?? 0}
       />
     </div>
   );

@@ -9,8 +9,6 @@ const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
 interface ScalableEllipseProps {
   id: number;
-  // isSelected: boolean;
-  // onSelect: () => void;
   radiusX: number;
   radiusY: number;
   x: number;

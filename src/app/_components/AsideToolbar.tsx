@@ -119,10 +119,18 @@ function ImageFiltersMenuToolbar() {
       <RangeInput
         min={-1}
         max={1}
-        label="Line width"
+        label="Brightness"
         step="0.001"
         onChange={handleBrightnessChange}
         defaultValue={selectedShape?.brightness ?? 0}
+      />
+      <RangeInput
+        min={-1}
+        max={1}
+        label="Grayscale"
+        step="0.001"
+        onChange={handleBrightnessChange}
+        defaultValue={selectedShape?.grayscale ?? 0}
       />
     </div>
   );

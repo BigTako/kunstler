@@ -16,11 +16,12 @@ interface ScalableImageProps {
   height: number;
   blurRadius: number;
   brightness: number;
+  grayscale: number;
   src: string;
 }
 
 const ScalableImage = observer(function (props: ScalableImageProps) {
-  const { id, x, y, width, height, draggable, src, blurRadius, brightness } = props;
+  const { id, x, y, width, height, draggable, src, blurRadius, brightness, grayscale } = props;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -59,6 +60,8 @@ const ScalableImage = observer(function (props: ScalableImageProps) {
     }
   }, [image]);
 
+  const imageLevel = [Konva.Filters.Blur, Konva.Filters.Brighten];
+
   return (
     <>
       <Image
@@ -74,9 +77,10 @@ const ScalableImage = observer(function (props: ScalableImageProps) {
         width={width}
         height={height}
         image={image}
-        filters={[Konva.Filters.Blur, Konva.Filters.Brighten]}
+        filters={[Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Grayscale]}
         blurRadius={blurRadius}
         brightness={brightness}
+        grayscale={grayscale}
       />
       {isSelected && (
         <Transformer

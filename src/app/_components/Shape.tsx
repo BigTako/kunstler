@@ -62,7 +62,7 @@ const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
     );
   }
   if (shape.type === ShapeEnum.IMAGE) {
-    const { id, x, y, width, height, blurRadius, src, brightness } = shape as ImageType;
+    const { id, x, y, width, height, blurRadius, src, brightness, contrast } = shape as ImageType;
     return (
       <ScalableImage
         id={id}
@@ -74,6 +74,7 @@ const Shape = observer(function ({ shape, draggable }: ShapePropsType) {
         draggable={draggable}
         blurRadius={blurRadius}
         brightness={brightness}
+        contrast={contrast}
       />
     );
   }

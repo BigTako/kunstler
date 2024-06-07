@@ -30,6 +30,7 @@ export class ImageTool implements Tool {
             height: imgHeight,
             blurRadius: 0,
             brightness: 0,
+            contrast: 0,
           } as ImageType);
         };
       };

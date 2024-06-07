@@ -41,6 +41,7 @@ export interface ImageType extends ShapeType {
   width: number;
   height: number;
   src: string;
+  blurRadius: number;
 }
 
 export type DrawingFuncType = (shape: Shape, id: number | string) => React.ReactNode;

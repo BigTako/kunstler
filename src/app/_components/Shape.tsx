@@ -2,11 +2,10 @@ import React, { LegacyRef, useEffect, useRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Line, Image, Transformer } from 'react-konva';
-import { EllipseType, ImageTool, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
+import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
 import { canvasState, toolState } from '@store';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
-import { observable } from 'mobx';
 import Konva from 'konva';
 
 // const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
@@ -17,17 +16,18 @@ interface ScalableImageProps {
   id: number;
   isSelected: boolean;
   onSelect: () => void;
+  draggable: boolean;
   x: number;
   y: number;
   width: number;
   height: number;
+  blurRadius: number;
   src: string;
-  draggable: boolean;
 }
 
 function FilterImage(props: ScalableImageProps) {
   // const { id, x, y, width, height, src, draggable, isSelected, onSelect } = props;
-  const { id, x, y, width, height, draggable, src, isSelected, onSelect } = props;
+  const { id, x, y, width, height, draggable, src, isSelected, onSelect, blurRadius } = props;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -53,8 +53,6 @@ function FilterImage(props: ScalableImageProps) {
     }
   }, [image]);
 
-  const tool = toolState.tool as ImageTool;
-
   return (
     <>
       <Image
@@ -71,7 +69,7 @@ function FilterImage(props: ScalableImageProps) {
         height={height}
         image={image}
         filters={[Konva.Filters.Blur]}
-        blurRadius={tool.blurRadius}
+        blurRadius={blurRadius}
       />
       {isSelected && (
         <Transformer
@@ -161,7 +159,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
     );
   }
   if (shape.type === ShapeEnum.IMAGE) {
-    const { id, x, y, width, height, src } = shape as ImageType;
+    const { id, x, y, width, height, blurRadius, src } = shape as ImageType;
     return (
       <FilterImage
         id={id}
@@ -173,6 +171,7 @@ const Shape = observer(function ({ shape }: { shape: ShapeType }) {
         draggable={draggable}
         isSelected={id === selectedId}
         onSelect={() => handleSelect(id)}
+        blurRadius={blurRadius}
       />
     );
   }

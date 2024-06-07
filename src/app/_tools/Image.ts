@@ -5,15 +5,13 @@ import { canvasState } from '@store';
 
 export class ImageTool implements Tool {
   isDrawing: boolean = false;
-  blurRadius: number;
   constructor() {
-    makeAutoObservable(this);
-    this.blurRadius = 0;
+    makeAutoObservable(this, {}, { deep: true });
   }
 
-  setBlurRadius(value: number) {
-    this.blurRadius = value;
-  }
+  // setBlurRadius(value: number) {
+  //   this.blurRadius = value;
+  // }
 
   upload(file: File) {
     const reader = new FileReader();
@@ -35,6 +33,7 @@ export class ImageTool implements Tool {
             y,
             width: imgWidth,
             height: imgHeight,
+            blurRadius: 0,
           } as ImageType);
         };
       };

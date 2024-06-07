@@ -5,8 +5,8 @@ import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'r
 import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
-import { toolState } from '@store';
-import { ImageTool } from '../_tools';
+import { canvasState, toolState } from '@store';
+import { ImageType, ShapeEnum } from '../_tools';
 
 function ColorInput({
   id,
@@ -81,9 +81,37 @@ function RangeInput({
   );
 }
 
+function ImageFiltersMenuToolbar() {
+  const selectedShape = canvasState.selectedShape as ImageType;
+  const isImageSelected = selectedShape?.type === ShapeEnum.IMAGE;
+
+  const handleBlurRadiusChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageSelected) {
+        canvasState.updateShape(selectedShape.id, { blurRadius: Number(e.target.value) } as ImageType);
+      }
+    },
+    [isImageSelected, selectedShape?.id],
+  );
+
+  return (
+    <div className="flex flex-col gap-3">
+      <RangeInput
+        min={0}
+        max={20}
+        label="Image blur radius"
+        onChange={handleBlurRadiusChange}
+        defaultValue={selectedShape?.blurRadius ?? 0}
+      />
+    </div>
+  );
+}
+
 const Toolbar = observer(function ({ className }: { className?: string }) {
-  const tool = toolState.tool;
-  const isImageTool = tool && tool instanceof ImageTool;
+  // const tool = toolState.tool;
+  const selectedShape = canvasState.selectedShape;
+  const openImageToolbar = selectedShape && selectedShape.type === ShapeEnum.IMAGE;
 
   const handleStrokeColorChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => toolState.setStrokeColor(e.target.value),
@@ -98,16 +126,6 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
   const handleLineWidthChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => toolState.setLineWidth(Number(e.target.value)),
     [],
-  );
-
-  const handleBlurRadiusChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      // const tool = toolState.tool;
-      if (isImageTool) {
-        tool.setBlurRadius(Number(e.target.value));
-      }
-    },
-    [tool, isImageTool],
   );
 
   return (
@@ -131,17 +149,7 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         onChange={handleLineWidthChange}
         defaultValue={toolState.lineWidth}
       />
-      {isImageTool && (
-        <div className="flex flex-col gap-3">
-          <RangeInput
-            min={0}
-            max={20}
-            label="Image blur radius"
-            onChange={handleBlurRadiusChange}
-            defaultValue={tool.blurRadius}
-          />
-        </div>
-      )}
+      {openImageToolbar && <ImageFiltersMenuToolbar />}
     </aside>
   );
 });

@@ -1,22 +1,37 @@
 'use client';
 
 import Konva from 'konva';
-import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useEffect, useRef } from 'react';
+import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useCallback, useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
+import { canvasState } from '../_store';
+import { observer } from 'mobx-react-lite';
 
-function Scalable<T extends Konva.Shape>({
-  isSelected,
-  onSelect,
+const Scalable = observer(function <T extends Konva.Shape>({
+  shapeId,
   scale,
   children,
 }: {
+  shapeId: number;
   children: ReactNode;
-  isSelected: boolean;
-  onSelect: () => void;
   scale: (node: T) => void;
 }) {
   const shapeRef = useRef<T>(null);
   const trRef = useRef<Konva.Transformer>(null);
+
+  const isSelected = shapeId === canvasState.selectedShape?.id;
+
+  const handleSelect = useCallback(
+    (id: number) => {
+      if (isSelected) {
+        canvasState.selectShape(-1);
+        // setSelectedId(-1);
+      } else {
+        canvasState.selectShape(id);
+        // setSelectedId(id);
+      }
+    },
+    [isSelected, shapeId],
+  );
 
   useEffect(() => {
     if (isSelected) {
@@ -31,8 +46,10 @@ function Scalable<T extends Konva.Shape>({
   return (
     <>
       {cloneElement(children as ReactElement, {
-        onClick: onSelect,
-        onTap: onSelect,
+        onClick: () => handleSelect(shapeId),
+        onTap: () => handleSelect(shapeId),
+        // onClick: onSelect,
+        // onTap: onSelect,
         ref: shapeRef as LegacyRef<T>,
         onTransformEnd: () => {
           const node = shapeRef.current;
@@ -57,6 +74,6 @@ function Scalable<T extends Konva.Shape>({
       )}
     </>
   );
-}
+});
 
 export default Scalable;

@@ -9,8 +9,8 @@ const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
 interface ScalableEllipseProps {
   id: number;
-  isSelected: boolean;
-  onSelect: () => void;
+  // isSelected: boolean;
+  // onSelect: () => void;
   radiusX: number;
   radiusY: number;
   x: number;
@@ -22,10 +22,10 @@ interface ScalableEllipseProps {
 }
 
 function ScalableEllipse(props: ScalableEllipseProps) {
-  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable, ...scalableProps } = props;
+  const { id, x, y, stroke, strokeWidth, fill, radiusX, radiusY, draggable } = props;
   return (
     <Scalable
-      {...scalableProps}
+      shapeId={id}
       scale={node => {
         const scaleX = node.scaleX();
         const scaleY = node.scaleY();

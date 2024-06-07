@@ -7,8 +7,8 @@ import Konva from 'konva';
 
 interface ScalableRectProps {
   id: number;
-  isSelected: boolean;
-  onSelect: () => void;
+  // isSelected: boolean;
+  // onSelect: () => void;
   x: number;
   y: number;
   width: number;
@@ -22,11 +22,11 @@ interface ScalableRectProps {
 const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
 function ScalableRect(props: ScalableRectProps) {
-  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable, ...scalableProps } = props;
+  const { id, x, y, stroke, strokeWidth, fill, width, height, draggable } = props;
 
   return (
     <Scalable
-      {...scalableProps}
+      shapeId={id}
       scale={node => {
         const scaleX = node.scaleX();
         const scaleY = node.scaleY();

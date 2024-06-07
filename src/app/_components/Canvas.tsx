@@ -44,9 +44,9 @@ export const Canvas = observer(function () {
       <Layer>
         {canvasState.undoList.map((shape, i) => (
           <Shape
-            isSelected={draggable ? shape.id === selectedId : false}
+            // isSelected={draggable ? shape.id === selectedId : false}
             draggable={draggable}
-            onSelect={() => handleSelect(shape.id)}
+            // onSelect={() => handleSelect(shape.id)}
             key={i}
             shape={shape}
           />

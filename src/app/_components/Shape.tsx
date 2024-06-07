@@ -1,9 +1,9 @@
-import React, { LegacyRef, useEffect, useRef, useState } from 'react';
+import React, { LegacyRef, useCallback, useEffect, useRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Line, Image, Transformer } from 'react-konva';
-import { EllipseType, ImageType, LineType, Palm, RectType, ShapeEnum, ShapeType } from '@tools';
-import { canvasState, toolState } from '@store';
+import { EllipseType, ImageType, LineType, RectType, ShapeEnum, ShapeType } from '@tools';
+import { canvasState } from '@store';
 import dynamic from 'next/dynamic';
 import useImage from 'use-image';
 import Konva from 'konva';
@@ -14,8 +14,6 @@ const ScalableEllipse = dynamic(() => import('./ScalableEllipse'), { ssr: false 
 
 interface ScalableImageProps {
   id: number;
-  isSelected: boolean;
-  onSelect: () => void;
   draggable: boolean;
   x: number;
   y: number;
@@ -25,13 +23,14 @@ interface ScalableImageProps {
   src: string;
 }
 
-function FilterImage(props: ScalableImageProps) {
-  // const { id, x, y, width, height, src, draggable, isSelected, onSelect } = props;
-  const { id, x, y, width, height, draggable, src, isSelected, onSelect, blurRadius } = props;
+const FilterImage = observer(function (props: ScalableImageProps) {
+  const { id, x, y, width, height, draggable, src, blurRadius } = props;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
   const trRef = useRef<Konva.Transformer>(null);
+
+  const isSelected = id === canvasState.selectedShape?.id;
 
   useEffect(() => {
     if (isSelected) {
@@ -42,6 +41,17 @@ function FilterImage(props: ScalableImageProps) {
       }
     }
   }, [isSelected]);
+
+  const handleSelect = useCallback(
+    (id: number) => {
+      if (isSelected) {
+        canvasState.selectShape(-1);
+      } else {
+        canvasState.selectShape(id);
+      }
+    },
+    [isSelected],
+  );
 
   // when image is loaded we need to cache the shape
   React.useEffect(() => {
@@ -64,7 +74,7 @@ function FilterImage(props: ScalableImageProps) {
         ref={imageRef as LegacyRef<Konva.Image>}
         x={x}
         y={y}
-        onClick={onSelect}
+        onClick={() => handleSelect(id)}
         width={width}
         height={height}
         image={image}
@@ -85,19 +95,9 @@ function FilterImage(props: ScalableImageProps) {
       )}
     </>
   );
-}
+});
 
-const Shape = observer(function ({
-  shape,
-  isSelected,
-  onSelect,
-  draggable,
-}: {
-  shape: ShapeType;
-  isSelected: boolean;
-  onSelect: () => void;
-  draggable: boolean;
-}) {
+const Shape = observer(function ({ shape, draggable }: { shape: ShapeType; draggable: boolean }) {
   if (shape.type === ShapeEnum.LINE) {
     let { points, strokeColor, lineWidth } = shape as LineType;
     return (
@@ -125,8 +125,6 @@ const Shape = observer(function ({
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
         draggable={draggable}
-        isSelected={isSelected}
-        onSelect={onSelect}
       />
     );
   }
@@ -143,8 +141,6 @@ const Shape = observer(function ({
         stroke={strokeColor as string}
         strokeWidth={strokeWidth as number}
         draggable={draggable}
-        isSelected={isSelected}
-        onSelect={onSelect}
       />
     );
   }
@@ -159,8 +155,6 @@ const Shape = observer(function ({
         width={width}
         src={src}
         draggable={draggable}
-        isSelected={isSelected}
-        onSelect={onSelect}
         blurRadius={blurRadius}
       />
     );

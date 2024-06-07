@@ -8,7 +8,8 @@ import { Image, Transformer } from 'react-konva';
 import { ImageType } from '../_tools';
 
 const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
-  const { id, x, y, width, height, src, blurRadius, brightness, contrast, noise } = shape;
+  const { id, x, y, width, height, src, filters } = shape;
+  const { blurRadius, brightness, contrast, noise } = filters;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();

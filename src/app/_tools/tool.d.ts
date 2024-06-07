@@ -35,16 +35,20 @@ export interface EllipseType extends ShapeType {
   radiusY: number;
 }
 
+export interface ImageFilterType {
+  blurRadius: number;
+  brightness: number;
+  contrast: number;
+  noise: number;
+}
+
 export interface ImageType extends ShapeType {
   x: number;
   y: number;
   width: number;
   height: number;
   src: string;
-  blurRadius: number;
-  brightness: number;
-  contrast: number;
-  noise: number;
+  filters: ImageFilterType;
 }
 
 export type DrawingFuncType = (shape: Shape, id: number | string) => React.ReactNode;

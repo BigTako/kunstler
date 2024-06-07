@@ -54,11 +54,13 @@ function RangeInput({
   defaultValue,
   min,
   max,
+  step = '1',
   onChange,
 }: {
   label: string;
   defaultValue: number | string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  step?: string;
   min: number;
   max: number;
 }) {
@@ -74,6 +76,7 @@ function RangeInput({
         className="cursor-pointer"
         min={min}
         max={max}
+        step={step}
         onChange={onChange}
         defaultValue={defaultValue}
       />
@@ -94,6 +97,15 @@ function ImageFiltersMenuToolbar() {
     },
     [isImageSelected, selectedShape?.id],
   );
+  const handleBrightnessChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      // const tool = toolState.tool;
+      if (isImageSelected) {
+        canvasState.updateShape(selectedShape.id, { brightness: Number(e.target.value) } as ImageType);
+      }
+    },
+    [isImageSelected, selectedShape?.id],
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -103,6 +115,14 @@ function ImageFiltersMenuToolbar() {
         label="Image blur radius"
         onChange={handleBlurRadiusChange}
         defaultValue={selectedShape?.blurRadius ?? 0}
+      />
+      <RangeInput
+        min={-1}
+        max={1}
+        label="Line width"
+        step="0.001"
+        onChange={handleBrightnessChange}
+        defaultValue={selectedShape?.brightness ?? 0}
       />
     </div>
   );
@@ -149,6 +169,7 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         onChange={handleLineWidthChange}
         defaultValue={toolState.lineWidth}
       />
+
       {openImageToolbar && <ImageFiltersMenuToolbar />}
     </aside>
   );

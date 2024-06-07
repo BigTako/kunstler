@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { LegacyRef, useCallback, useEffect, useRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { LegacyRef, useCallback, useEffect, useRef } from 'react';
 import useImage from 'use-image';
 import { canvasState } from '../_store';
 import Konva from 'konva';
@@ -16,11 +15,12 @@ interface ScalableImageProps {
   width: number;
   height: number;
   blurRadius: number;
+  brightness: number;
   src: string;
 }
 
 const ScalableImage = observer(function (props: ScalableImageProps) {
-  const { id, x, y, width, height, draggable, src, blurRadius } = props;
+  const { id, x, y, width, height, draggable, src, blurRadius, brightness } = props;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -74,8 +74,9 @@ const ScalableImage = observer(function (props: ScalableImageProps) {
         width={width}
         height={height}
         image={image}
-        filters={[Konva.Filters.Blur]}
+        filters={[Konva.Filters.Blur, Konva.Filters.Brighten]}
         blurRadius={blurRadius}
+        brightness={brightness}
       />
       {isSelected && (
         <Transformer

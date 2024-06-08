@@ -144,6 +144,18 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         onChange={e => handleFilterChange({ pixelate: Number(e.target.value) })}
         defaultValue={pixelate ?? 0}
       />
+      <div className="flex items-center justify-between">
+        <label htmlFor="color-input" className="inline-flex">
+          Grayscale
+        </label>
+        <input
+          type="checkbox"
+          id="lint-width-input"
+          name="lint-width-input"
+          className="cursor-pointer"
+          onChange={e => handleFilterChange({ grayscale: e.target.checked })}
+        />
+      </div>
     </div>
   );
 });

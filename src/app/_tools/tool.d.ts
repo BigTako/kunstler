@@ -41,6 +41,7 @@ export interface ImageFilterType {
   contrast: number;
   noise: number;
   pixelate: number;
+  grayscale: boolean;
 }
 
 export interface ImageType extends ShapeType {

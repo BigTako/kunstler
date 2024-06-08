@@ -28,7 +28,7 @@ export class ImageTool implements Tool {
             y,
             width: imgWidth,
             height: imgHeight,
-            filters: { blurRadius: 0, brightness: 0, contrast: 0, noise: 0, pixelate: 0 },
+            filters: { blurRadius: 0, brightness: 0, contrast: 0, noise: 0, pixelate: 0, grayscale: false },
           } as Omit<ImageType, 'id'>);
         };
       };

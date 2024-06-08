@@ -9,7 +9,7 @@ import { ImageType } from '../_tools';
 
 const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
   const { id, x, y, width, height, src, filters } = shape;
-  const { blurRadius, brightness, contrast, noise } = filters;
+  const { blurRadius, brightness, contrast, noise, pixelate } = filters;
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -61,11 +61,18 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
         width={width}
         height={height}
         image={image}
-        filters={[Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Noise]}
+        filters={[
+          Konva.Filters.Blur,
+          Konva.Filters.Brighten,
+          Konva.Filters.Contrast,
+          Konva.Filters.Noise,
+          Konva.Filters.Pixelate,
+        ]}
         blurRadius={blurRadius}
         brightness={brightness}
         contrast={contrast}
         noise={noise}
+        pixelSize={pixelate <= 0 ? 0.00001 : pixelate}
       />
       {isSelected && (
         <Transformer

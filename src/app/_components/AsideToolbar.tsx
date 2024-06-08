@@ -102,7 +102,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
     return null;
   }
 
-  const { blurRadius, brightness, contrast, noise } = filters;
+  const { blurRadius, brightness, contrast, noise, pixelate } = filters;
 
   return (
     <div className="flex flex-col gap-3">
@@ -135,6 +135,14 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         label="Noise"
         onChange={e => handleFilterChange({ noise: Number(e.target.value) })}
         defaultValue={noise ?? 0}
+      />
+      <RangeInput
+        min={0}
+        max={10}
+        step="0.01"
+        label="Pixelate"
+        onChange={e => handleFilterChange({ pixelate: Number(e.target.value) })}
+        defaultValue={pixelate ?? 0}
       />
     </div>
   );
@@ -188,22 +196,23 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
 });
 
 export function AsideToolbar() {
-  const [isToolbarOpened, setIsToolbarOpened] = useState(false);
+  // const [isToolbarOpened, setIsToolbarOpened] = useState(false);
   return (
-    <>
-      <div className="absolute bottom-1/2 left-5 hidden md:flex">
-        <Toolbar />
-      </div>
-      <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-2 shadow-sm md:hidden">
-        <SquareButton title="Paramters" onClick={() => setIsToolbarOpened(v => !v)}>
-          <BsPalette />
-        </SquareButton>
-        {isToolbarOpened && (
-          <div className="absolute bottom-20 right-1/2 translate-x-1/2">
-            <Toolbar />
-          </div>
-        )}
-      </div>
-    </>
+    <div className="absolute bottom-0 left-5 hidden h-[100vh] items-center md:flex">
+      <Toolbar />
+    </div>
+    // <>
+
+    //   <div className="absolute bottom-10 right-1/2 flex translate-x-1/2 flex-col gap-3 rounded-lg bg-primary-50 p-2 shadow-sm md:hidden">
+    //     <SquareButton title="Paramters" onClick={() => setIsToolbarOpened(v => !v)}>
+    //       <BsPalette />
+    //     </SquareButton>
+    //     {isToolbarOpened && (
+    //       <div className="absolute bottom-20 right-1/2 translate-x-1/2">
+    //         <Toolbar />
+    //       </div>
+    //     )}
+    //   </div>
+    // </>
   );
 }

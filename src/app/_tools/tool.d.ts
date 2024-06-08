@@ -40,6 +40,7 @@ export interface ImageFilterType {
   brightness: number;
   contrast: number;
   noise: number;
+  pixelate: number;
 }
 
 export interface ImageType extends ShapeType {

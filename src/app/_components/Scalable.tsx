@@ -19,12 +19,13 @@ const Scalable = observer(function <T extends Konva.Shape>({
   const shapeRef = useRef<T>(null);
   const trRef = useRef<Konva.Transformer>(null);
 
-  const isSelected = shapeId === canvasState.selectedShape?.id;
+  const isSelected = shapeId === canvasState.selectedShapeId;
 
   const isSelectable = toolState.tool instanceof Palm;
 
   const handleSelect = useCallback(
     (id: number) => {
+      console.log({ isSelectable });
       if (!isSelectable) return;
       if (isSelected) {
         canvasState.selectShape(-1);

@@ -17,6 +17,10 @@ const config: Config = {
       'secondary-200': '#c7d2fe',
       'secondary-300': '#a5b4fc',
       'secondary-400': '#818cf8',
+      'red-100': '#fee2e2',
+      'red-200': '#fecaca',
+      'red-600': '#dc2626',
+      'red-700': '#b91c1c',
     },
     extend: {
       boxShadow: {

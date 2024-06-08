@@ -61,12 +61,46 @@ class CanvasState {
     return null;
   }
 
+  duplicateSelectedShape() {
+    const shape = this.selectedShape() as ShapeType & {
+      x: number;
+      y: number;
+    };
+
+    if (shape) {
+      const addedShape = this.addShape({ ...shape, x: shape.x + 10, y: shape.y + 10 } as ShapeType & {
+        x: number;
+        y: number;
+      });
+      this.selectShape(addedShape.id);
+    }
+  }
+
+  removeSelectedShape() {
+    if (this.selectedShapeId > 0) {
+      this.removeShape(this.selectedShapeId);
+      this.selectShape(-1);
+    }
+  }
+
   updateShape(id: number, newShape: Partial<ShapeType>) {
     this.undoList = this.undoList.map(s => (s.id === id ? { ...s, ...newShape, id } : s));
   }
 
   addShape(shape: Omit<ShapeType, 'id'>) {
-    this.undoList.push({ ...shape, id: this.undoList.length + 1 } as ShapeType);
+    const newShape = { ...shape, id: this.undoList.length + 1 } as ShapeType;
+    this.undoList.push(newShape);
+    return newShape;
+  }
+
+  addAndSelectShape(shape: Omit<ShapeType, 'id'>) {
+    const newShape = this.addShape(shape);
+    this.selectShape(newShape.id);
+    return newShape;
+  }
+
+  removeShape(id: number) {
+    this.undoList = this.undoList.filter(s => s.id !== id);
   }
 }
 

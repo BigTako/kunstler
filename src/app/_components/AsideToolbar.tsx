@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import React, { ChangeEvent, ChangeEventHandler, use, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
 import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';

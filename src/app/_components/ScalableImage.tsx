@@ -10,8 +10,14 @@ import { Filter } from 'konva/lib/Node';
 
 const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
   const { id, x, y, width, height, src, filters } = shape;
-  const { blurRadius, brightness, contrast, noise, pixelate, grayscale } = filters;
-  const [imageFilters, setImageFilters] = useState<Filter[]>([]);
+  const { blurRadius, brightness, contrast, noise, pixelate, grayscale, invert } = filters;
+  const [imageFilters, setImageFilters] = useState<Filter[]>([
+    Konva.Filters.Blur,
+    Konva.Filters.Brighten,
+    Konva.Filters.Contrast,
+    Konva.Filters.Noise,
+    Konva.Filters.Pixelate,
+  ]);
 
   const [image] = useImage(src, 'anonymous');
   const imageRef = useRef<Konva.Image>();
@@ -48,21 +54,20 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
     }
   }, [image]);
 
-  const initialImageFilters = [
-    Konva.Filters.Blur,
-    Konva.Filters.Brighten,
-    Konva.Filters.Contrast,
-    Konva.Filters.Noise,
-    Konva.Filters.Pixelate,
-  ];
+  const handleFilter = useCallback((filter: Filter, condition: boolean) => {
+    setImageFilters(filters => {
+      if (condition) {
+        return [...filters, filter];
+      } else {
+        return filters.filter(f => f !== filter);
+      }
+    });
+  }, []);
 
   useEffect(() => {
-    if (grayscale) {
-      setImageFilters([...initialImageFilters, Konva.Filters.Grayscale]);
-    } else {
-      setImageFilters(initialImageFilters);
-    }
-  }, [grayscale, initialImageFilters]);
+    handleFilter(Konva.Filters.Grayscale, grayscale);
+    handleFilter(Konva.Filters.Invert, invert);
+  }, [handleFilter, grayscale, invert]);
 
   return (
     <>

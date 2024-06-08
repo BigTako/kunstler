@@ -50,6 +50,7 @@ export function MobileAsideToolbar() {
 }
 
 function RangeInput({
+  id,
   label,
   defaultValue,
   min,
@@ -57,6 +58,7 @@ function RangeInput({
   step = '1',
   onChange,
 }: {
+  id: string;
   label: string;
   defaultValue: number | string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -66,19 +68,47 @@ function RangeInput({
 }) {
   return (
     <div className="flex flex-col justify-between">
-      <label htmlFor="color-input" className="inline-flex items-center">
+      <label htmlFor={id} className="inline-flex items-center">
         {label}
       </label>
       <input
         type="range"
-        id="lint-width-input"
-        name="lint-width-input"
+        id={id}
+        name={id}
         className="cursor-pointer"
         min={min}
         max={max}
         step={step}
         onChange={onChange}
         defaultValue={defaultValue}
+      />
+    </div>
+  );
+}
+
+function CheckboxInput({
+  id,
+  label,
+  defaultChecked,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  defaultChecked: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <label htmlFor={id} className="inline-flex">
+        {label}
+      </label>
+      <input
+        type="checkbox"
+        defaultChecked={defaultChecked}
+        id={id}
+        name={id}
+        className="cursor-pointer"
+        onChange={onChange}
       />
     </div>
   );
@@ -107,6 +137,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
   return (
     <div className="flex flex-col gap-3">
       <RangeInput
+        id="blur-radius-input"
         min={0}
         max={20}
         label="Blur radius"
@@ -114,6 +145,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         defaultValue={blurRadius ?? 0}
       />
       <RangeInput
+        id="brightness-input"
         min={-1}
         max={1}
         label="Brightness"
@@ -122,6 +154,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         defaultValue={brightness ?? 0}
       />
       <RangeInput
+        id="contrast-input"
         min={-100}
         max={100}
         label="Contrast"
@@ -129,6 +162,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         defaultValue={contrast ?? 0}
       />
       <RangeInput
+        id="noise-input"
         min={0}
         max={2}
         step="0.01"
@@ -137,6 +171,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         defaultValue={noise ?? 0}
       />
       <RangeInput
+        id="pixelate-input"
         min={0}
         max={10}
         step="0.01"
@@ -144,18 +179,18 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         onChange={e => handleFilterChange({ pixelate: Number(e.target.value) })}
         defaultValue={pixelate ?? 0}
       />
-      <div className="flex items-center justify-between">
-        <label htmlFor="color-input" className="inline-flex">
-          Grayscale
-        </label>
-        <input
-          type="checkbox"
-          id="lint-width-input"
-          name="lint-width-input"
-          className="cursor-pointer"
-          onChange={e => handleFilterChange({ grayscale: e.target.checked })}
-        />
-      </div>
+      <CheckboxInput
+        id="grayscale-enabled-input"
+        label="Grayscale"
+        onChange={e => handleFilterChange({ grayscale: e.target.checked })}
+        defaultChecked={filters.grayscale}
+      />
+      <CheckboxInput
+        id="inversion-enabled-input"
+        label="Invert"
+        onChange={e => handleFilterChange({ invert: e.target.checked })}
+        defaultChecked={filters.invert}
+      />
     </div>
   );
 });
@@ -195,6 +230,7 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         <ColorInput id="background-color-input" onChange={handleFillColorChange} defaultValue={toolState.fillColor} />
       </div>
       <RangeInput
+        id="line-width-input"
         min={1}
         max={50}
         label="Line width"

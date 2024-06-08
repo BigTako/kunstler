@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React from 'react';
 
 export enum ShapeEnum {
@@ -42,6 +41,7 @@ export interface ImageFilterType {
   noise: number;
   pixelate: number;
   grayscale: boolean;
+  invert: boolean;
 }
 
 export interface ImageType extends ShapeType {

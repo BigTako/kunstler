@@ -6,7 +6,7 @@ import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
 import { canvasState, toolState } from '@store';
-import { ImageType, ShapeEnum } from '../_tools';
+import { ImageFilterType, ImageType, ShapeEnum } from '../_tools';
 
 function ColorInput({
   id,
@@ -89,36 +89,10 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
 
   const { filters } = canvasState.getShape(canvasState.selectedShapeId) as ImageType;
 
-  const handleBlurRadiusChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFilterChange = useCallback(
+    (newFilters: Partial<ImageFilterType>) => {
       canvasState.updateShape(currentShape, {
-        filters: { ...filters, blurRadius: Number(e.target.value) },
-      } as ImageType);
-    },
-    [currentShape, filters],
-  );
-  const handleBrightnessChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      canvasState.updateShape(currentShape, {
-        filters: { ...filters, brightness: Number(e.target.value) },
-      } as ImageType);
-    },
-    [currentShape, filters],
-  );
-
-  const handleContrastChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      canvasState.updateShape(currentShape, {
-        filters: { ...filters, contrast: Number(e.target.value) },
-      } as ImageType);
-    },
-    [currentShape, filters],
-  );
-
-  const handleNoiseChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      canvasState.updateShape(currentShape, {
-        filters: { ...filters, noise: Number(e.target.value) },
+        filters: { ...filters, ...newFilters },
       } as ImageType);
     },
     [currentShape, filters],
@@ -136,7 +110,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         min={0}
         max={20}
         label="Blur radius"
-        onChange={handleBlurRadiusChange}
+        onChange={e => handleFilterChange({ blurRadius: Number(e.target.value) })}
         defaultValue={blurRadius ?? 0}
       />
       <RangeInput
@@ -144,17 +118,29 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         max={1}
         label="Brightness"
         step="0.01"
-        onChange={handleBrightnessChange}
+        onChange={e => handleFilterChange({ brightness: Number(e.target.value) })}
         defaultValue={brightness ?? 0}
       />
-      <RangeInput min={-100} max={100} label="Contrast" onChange={handleContrastChange} defaultValue={contrast ?? 0} />
-      <RangeInput min={0} max={2} step="0.01" label="Noise" onChange={handleNoiseChange} defaultValue={noise ?? 0} />
+      <RangeInput
+        min={-100}
+        max={100}
+        label="Contrast"
+        onChange={e => handleFilterChange({ contrast: Number(e.target.value) })}
+        defaultValue={contrast ?? 0}
+      />
+      <RangeInput
+        min={0}
+        max={2}
+        step="0.01"
+        label="Noise"
+        onChange={e => handleFilterChange({ noise: Number(e.target.value) })}
+        defaultValue={noise ?? 0}
+      />
     </div>
   );
 });
 
 const Toolbar = observer(function ({ className }: { className?: string }) {
-  // const tool = toolState.tool;
   const selectedShape = canvasState.selectedShape();
 
   const openImageToolbar = selectedShape && selectedShape.type === ShapeEnum.IMAGE;

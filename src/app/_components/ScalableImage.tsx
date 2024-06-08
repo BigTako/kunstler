@@ -17,8 +17,6 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
 
   const isSelected = id === canvasState.selectedShapeId;
 
-  console.log({ filters: JSON.stringify(filters) });
-
   useEffect(() => {
     if (isSelected) {
       if (trRef.current) {

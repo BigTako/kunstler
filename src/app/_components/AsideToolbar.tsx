@@ -86,46 +86,52 @@ function RangeInput({
 
 function ImageFiltersMenuToolbar() {
   const selectedShape = canvasState.selectedShape as ImageType;
-  const isImageSelected = selectedShape?.type === ShapeEnum.IMAGE;
+  // const isImageSelected = selectedShape?.type === ShapeEnum.IMAGE;
 
   const handleBlurRadiusChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      // const tool = toolState.tool;
-      if (isImageSelected) {
-        canvasState.updateShape(selectedShape.id, { blurRadius: Number(e.target.value) } as ImageType);
-      }
+      const { filters } = canvasState.selectedShape as ImageType;
+      canvasState.updateShape(selectedShape.id, {
+        filters: { ...filters, blurRadius: Number(e.target.value) },
+      } as ImageType);
     },
-    [isImageSelected, selectedShape?.id],
+    [selectedShape?.id],
   );
   const handleBrightnessChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      // const tool = toolState.tool;
-      if (isImageSelected) {
-        canvasState.updateShape(selectedShape.id, { brightness: Number(e.target.value) } as ImageType);
-      }
+      const { filters } = canvasState.selectedShape as ImageType;
+      canvasState.updateShape(selectedShape.id, {
+        filters: { ...filters, brightness: Number(e.target.value) },
+      } as ImageType);
     },
-    [isImageSelected, selectedShape?.id],
+    [selectedShape?.id],
   );
 
   const handleContrastChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      // const tool = toolState.tool;
-      if (isImageSelected) {
-        canvasState.updateShape(selectedShape.id, { contrast: Number(e.target.value) } as ImageType);
-      }
+      const { filters } = canvasState.selectedShape as ImageType;
+      canvasState.updateShape(selectedShape.id, {
+        filters: { ...filters, contrast: Number(e.target.value) },
+      } as ImageType);
     },
-    [isImageSelected, selectedShape?.id],
+    [selectedShape?.id],
   );
 
   const handleNoiseChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      // const tool = toolState.tool;
-      if (isImageSelected) {
-        canvasState.updateShape(selectedShape.id, { noise: Number(e.target.value) } as ImageType);
-      }
+      const { filters } = canvasState.selectedShape as ImageType;
+      canvasState.updateShape(selectedShape.id, {
+        filters: { ...filters, noise: Number(e.target.value) },
+      } as ImageType);
     },
-    [isImageSelected, selectedShape?.id],
+    [selectedShape?.id],
   );
+
+  if (!selectedShape) {
+    return null;
+  }
+
+  const { blurRadius, brightness, contrast, noise } = selectedShape.filters;
 
   return (
     <div className="flex flex-col gap-3">
@@ -134,31 +140,18 @@ function ImageFiltersMenuToolbar() {
         max={20}
         label="Blur radius"
         onChange={handleBlurRadiusChange}
-        defaultValue={selectedShape?.blurRadius ?? 0}
+        defaultValue={blurRadius ?? 0}
       />
       <RangeInput
         min={-1}
         max={1}
         label="Brightness"
-        step="0.001"
+        step="0.01"
         onChange={handleBrightnessChange}
-        defaultValue={selectedShape?.brightness ?? 0}
+        defaultValue={brightness ?? 0}
       />
-      <RangeInput
-        min={-100}
-        max={100}
-        label="Contrast"
-        onChange={handleContrastChange}
-        defaultValue={selectedShape?.contrast ?? 0}
-      />
-      <RangeInput
-        min={0}
-        max={2}
-        step="0.001"
-        label="Noise"
-        onChange={handleNoiseChange}
-        defaultValue={selectedShape?.noise ?? 0}
-      />
+      <RangeInput min={-100} max={100} label="Contrast" onChange={handleContrastChange} defaultValue={contrast ?? 0} />
+      <RangeInput min={0} max={2} step="0.01" label="Noise" onChange={handleNoiseChange} defaultValue={noise ?? 0} />
     </div>
   );
 }

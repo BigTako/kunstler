@@ -2,10 +2,10 @@ import React, { LegacyRef, useCallback, useEffect, useRef, useState } from 'reac
 
 import { observer } from 'mobx-react-lite';
 import useImage from 'use-image';
-import { canvasState } from '../_store';
+import { canvasState } from '@store';
 import Konva from 'konva';
 import { Image, Transformer } from 'react-konva';
-import { ImageType } from '../_tools';
+import { ImageType } from '@tools';
 import { Filter } from 'konva/lib/Node';
 
 const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
@@ -49,7 +49,8 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
   useEffect(() => {
     if (image) {
       if (imageRef.current) {
-        imageRef.current.cache();
+        imageRef.current.clearCache();
+        imageRef.current.cache({ pixelRatio: 0.5 });
       }
     }
   }, [image]);

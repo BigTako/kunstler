@@ -16,8 +16,8 @@ export class ImageTool implements Tool {
       img.onload = () => {
         const image = new window.Image();
         image.src = img.src;
-        const imgWidth = image.width / 3;
-        const imgHeight = image.height / 3;
+        const imgWidth = image.width;
+        const imgHeight = image.height;
         const x = window.innerWidth / 2 - imgWidth / 2;
         const y = window.innerHeight / 2 - imgHeight / 2;
         image.onload = () => {

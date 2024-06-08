@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { observer } from 'mobx-react-lite';
 import { Stage, Layer } from 'react-konva';
 import { canvasState, toolState } from '@store';
-import { Palm } from '../_tools';
+import { Palm } from '@tools';
 import Konva from 'konva';
 
 const Shape = dynamic(() => import('../_components/Shape'), {

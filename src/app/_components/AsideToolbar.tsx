@@ -6,7 +6,7 @@ import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
 import { canvasState, toolState } from '@store';
-import { ImageFilterType, ImageType, ShapeEnum } from '../_tools';
+import { ImageFilterType, ImageType, ShapeEnum } from '@tools';
 
 function ColorInput({
   id,

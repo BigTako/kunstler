@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg, BsDownload } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
@@ -8,8 +8,7 @@ import { PiHand } from 'react-icons/pi';
 import { SquareButton } from '@components';
 import { cn } from '@/utils/cn';
 import { canvasState, toolState } from '@store';
-import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
-import { ImageTool } from '../_tools/Image';
+import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool, ImageTool } from '@tools';
 import Konva from 'konva';
 
 function downloadURI({ uri, name }: { uri: string; name: string }) {

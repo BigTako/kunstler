@@ -3,9 +3,9 @@
 import Konva from 'konva';
 import React, { LegacyRef, ReactElement, ReactNode, cloneElement, useCallback, useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
-import { canvasState, toolState } from '../_store';
+import { canvasState, toolState } from '@store';
 import { observer } from 'mobx-react-lite';
-import { Palm } from '../_tools';
+import { Palm } from '@tools';
 
 const Scalable = observer(function <T extends Konva.Shape>({
   shapeId,

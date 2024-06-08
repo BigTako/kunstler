@@ -25,7 +25,6 @@ const Scalable = observer(function <T extends Konva.Shape>({
 
   const handleSelect = useCallback(
     (id: number) => {
-      console.log({ isSelectable });
       if (!isSelectable) return;
       if (isSelected) {
         canvasState.selectShape(-1);

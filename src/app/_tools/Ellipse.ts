@@ -14,7 +14,6 @@ export class Ellipse implements Tool {
   }
 
   onMouseDown(e: KonvaEventObject<MouseEvent>) {
-    console.log('drawing ellipse');
     this.isDrawing = true;
     const stage = e.target.getStage();
     if (stage) {

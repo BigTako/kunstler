@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import React, { ChangeEvent, ChangeEventHandler, useCallback, useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, use, useCallback, useEffect, useState } from 'react';
 import { BsPalette } from 'react-icons/bs';
 import { SquareButton } from '@components';
 import { observer } from 'mobx-react-lite';
@@ -12,18 +12,18 @@ function ColorInput({
   id,
   className,
   onChange,
-  defaultValue,
+  value,
 }: {
   id: string;
   className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
-  defaultValue?: string;
+  value: string;
 }) {
   return (
     <input
       type="color"
       id={id}
-      defaultValue={defaultValue}
+      value={value}
       onChange={onChange}
       className={cn(
         'box-border h-[30px] w-[30px] cursor-pointer rounded-md border-none outline outline-1 outline-offset-2 outline-primary-900',
@@ -52,7 +52,7 @@ export function MobileAsideToolbar() {
 function RangeInput({
   id,
   label,
-  defaultValue,
+  value,
   min,
   max,
   step = '1',
@@ -60,7 +60,7 @@ function RangeInput({
 }: {
   id: string;
   label: string;
-  defaultValue: number | string;
+  value: number | string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   step?: string;
   min: number;
@@ -80,7 +80,7 @@ function RangeInput({
         max={max}
         step={step}
         onChange={onChange}
-        defaultValue={defaultValue}
+        value={value}
       />
     </div>
   );
@@ -89,12 +89,12 @@ function RangeInput({
 function CheckboxInput({
   id,
   label,
-  defaultChecked,
+  checked,
   onChange,
 }: {
   id: string;
   label: string;
-  defaultChecked: boolean;
+  checked: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
@@ -102,14 +102,7 @@ function CheckboxInput({
       <label htmlFor={id} className="inline-flex">
         {label}
       </label>
-      <input
-        type="checkbox"
-        defaultChecked={defaultChecked}
-        id={id}
-        name={id}
-        className="cursor-pointer"
-        onChange={onChange}
-      />
+      <input type="checkbox" checked={checked} id={id} name={id} className="cursor-pointer" onChange={onChange} />
     </div>
   );
 }
@@ -142,7 +135,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         max={20}
         label="Blur radius"
         onChange={e => handleFilterChange({ blurRadius: Number(e.target.value) })}
-        defaultValue={blurRadius ?? 0}
+        value={blurRadius ?? 0}
       />
       <RangeInput
         id="brightness-input"
@@ -151,7 +144,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         label="Brightness"
         step="0.01"
         onChange={e => handleFilterChange({ brightness: Number(e.target.value) })}
-        defaultValue={brightness ?? 0}
+        value={brightness ?? 0}
       />
       <RangeInput
         id="contrast-input"
@@ -159,7 +152,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         max={100}
         label="Contrast"
         onChange={e => handleFilterChange({ contrast: Number(e.target.value) })}
-        defaultValue={contrast ?? 0}
+        value={contrast ?? 0}
       />
       <RangeInput
         id="noise-input"
@@ -168,7 +161,7 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         step="0.01"
         label="Noise"
         onChange={e => handleFilterChange({ noise: Number(e.target.value) })}
-        defaultValue={noise ?? 0}
+        value={noise ?? 0}
       />
       <RangeInput
         id="pixelate-input"
@@ -177,19 +170,19 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
         step="0.01"
         label="Pixelate"
         onChange={e => handleFilterChange({ pixelate: Number(e.target.value) })}
-        defaultValue={pixelate ?? 0}
+        value={pixelate ?? 0}
       />
       <CheckboxInput
         id="grayscale-enabled-input"
         label="Grayscale"
         onChange={e => handleFilterChange({ grayscale: e.target.checked })}
-        defaultChecked={filters.grayscale}
+        checked={filters.grayscale}
       />
       <CheckboxInput
         id="inversion-enabled-input"
         label="Invert"
         onChange={e => handleFilterChange({ invert: e.target.checked })}
-        defaultChecked={filters.invert}
+        checked={filters.invert}
       />
     </div>
   );
@@ -197,23 +190,43 @@ const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
 
 const Toolbar = observer(function ({ className }: { className?: string }) {
   const selectedShape = canvasState.selectedShape();
-
   const openImageToolbar = selectedShape && selectedShape.type === ShapeEnum.IMAGE;
 
   const handleStrokeColorChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => toolState.setStrokeColor(e.target.value),
-    [],
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (selectedShape) {
+        canvasState.updateShape(selectedShape.id, {
+          strokeColor: e.target.value,
+        });
+      }
+      toolState.setStrokeColor(e.target.value);
+    },
+    [selectedShape],
   );
 
   const handleFillColorChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => toolState.setFillColor(e.target.value),
-    [],
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (selectedShape) {
+        canvasState.updateShape(selectedShape.id, {
+          fillColor: e.target.value,
+        });
+      }
+      toolState.setFillColor(e.target.value);
+    },
+    [selectedShape],
   );
 
   const handleLineWidthChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => toolState.setLineWidth(Number(e.target.value)),
-    [],
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (selectedShape) {
+        canvasState.updateShape(selectedShape.id, { strokeWidth: Number(e.target.value) });
+      }
+      toolState.setLineWidth(Number(e.target.value));
+    },
+    [selectedShape],
   );
+
+  const { strokeColor, fillColor, strokeWidth } = selectedShape || toolState;
 
   return (
     <aside className={cn('flex flex-col gap-3 rounded-lg bg-primary-50 p-3 shadow-sm', className)}>
@@ -221,13 +234,13 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         <label htmlFor="stroke-color-input" className="inline-flex items-center">
           Stroke color
         </label>
-        <ColorInput id="stroke-color-input" onChange={handleStrokeColorChange} defaultValue={toolState.strokeColor} />
+        <ColorInput id="stroke-color-input" onChange={handleStrokeColorChange} value={strokeColor as string} />
       </div>
       <div className="flex justify-between">
         <label htmlFor="color-input" className="inline-flex items-center">
           Background color
         </label>
-        <ColorInput id="background-color-input" onChange={handleFillColorChange} defaultValue={toolState.fillColor} />
+        <ColorInput id="background-color-input" onChange={handleFillColorChange} value={fillColor as string} />
       </div>
       <RangeInput
         id="line-width-input"
@@ -235,7 +248,7 @@ const Toolbar = observer(function ({ className }: { className?: string }) {
         max={50}
         label="Line width"
         onChange={handleLineWidthChange}
-        defaultValue={toolState.strokeWidth}
+        value={strokeWidth as number}
       />
 
       {openImageToolbar && <ImageFiltersMenuToolbar />}

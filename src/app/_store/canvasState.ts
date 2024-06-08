@@ -1,13 +1,24 @@
 import { makeAutoObservable } from 'mobx';
 import { ShapeType } from '@tools';
+import { LegacyRef } from 'react';
+import Konva from 'konva';
 
 class CanvasState {
   undoList: ShapeType[] = [];
   redoList: ShapeType[] = [];
   selectedShapeId: number = -1;
+  stageRef: LegacyRef<Konva.Stage> = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  getStageRef() {
+    return this.stageRef;
+  }
+
+  setStageRef(ref: LegacyRef<Konva.Stage>) {
+    this.stageRef = ref;
   }
 
   selectShape(id: number) {

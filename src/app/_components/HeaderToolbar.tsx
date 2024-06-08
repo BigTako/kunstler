@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg } from 'react-icons/bs';
+import { BsBrush, BsPaintBucket, BsApp, BsCircle, BsEraser, BsImage, BsDashLg, BsDownload } from 'react-icons/bs';
 import { HiArrowUturnLeft, HiArrowUturnRight } from 'react-icons/hi2';
 import { PiHand } from 'react-icons/pi';
 import { SquareButton } from '@components';
@@ -10,6 +10,17 @@ import { cn } from '@/utils/cn';
 import { canvasState, toolState } from '@store';
 import { Brush, Ellipse as EllipseTool, Line as LineTool, Palm, Rect as RectTool } from '@tools';
 import { ImageTool } from '../_tools/Image';
+import Konva from 'konva';
+
+function downloadURI({ uri, name }: { uri: string; name: string }) {
+  var link = document.createElement('a');
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  // delete link;
+}
 
 const headerToolbarButtons = [
   {
@@ -76,6 +87,22 @@ const headerToolbarButtons = [
     selectable: false,
     onClick: () => {
       canvasState.redo();
+    },
+  },
+  {
+    title: 'Download',
+    icon: <BsDownload />,
+    selectable: false,
+    onClick: () => {
+      canvasState.selectShape(-1);
+      const stageRef = canvasState.getStageRef() as React.MutableRefObject<Konva.Stage>;
+      if (!stageRef) return;
+
+      const stage = stageRef.current as Konva.Stage;
+      if (!stage) return;
+
+      const uri = stage.toDataURL({ pixelRatio: 3 });
+      downloadURI({ uri, name: `image-${Date.now()}.jpg` });
     },
   },
 ];

@@ -15,7 +15,9 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
   const imageRef = useRef<Konva.Image>();
   const trRef = useRef<Konva.Transformer>(null);
 
-  const isSelected = id === canvasState.selectedShape?.id;
+  const isSelected = id === canvasState.selectedShapeId;
+
+  console.log({ filters: JSON.stringify(filters) });
 
   useEffect(() => {
     if (isSelected) {

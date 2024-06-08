@@ -84,54 +84,51 @@ function RangeInput({
   );
 }
 
-function ImageFiltersMenuToolbar() {
-  const selectedShape = canvasState.selectedShape as ImageType;
-  // const isImageSelected = selectedShape?.type === ShapeEnum.IMAGE;
+const ImageFiltersMenuToolbar = observer(function ImageFiltersMenuToolbar() {
+  const currentShape = canvasState.selectedShapeId;
+
+  const { filters } = canvasState.getShape(canvasState.selectedShapeId) as ImageType;
 
   const handleBlurRadiusChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const { filters } = canvasState.selectedShape as ImageType;
-      canvasState.updateShape(selectedShape.id, {
+      canvasState.updateShape(currentShape, {
         filters: { ...filters, blurRadius: Number(e.target.value) },
       } as ImageType);
     },
-    [selectedShape?.id],
+    [currentShape, filters],
   );
   const handleBrightnessChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const { filters } = canvasState.selectedShape as ImageType;
-      canvasState.updateShape(selectedShape.id, {
+      canvasState.updateShape(currentShape, {
         filters: { ...filters, brightness: Number(e.target.value) },
       } as ImageType);
     },
-    [selectedShape?.id],
+    [currentShape, filters],
   );
 
   const handleContrastChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const { filters } = canvasState.selectedShape as ImageType;
-      canvasState.updateShape(selectedShape.id, {
+      canvasState.updateShape(currentShape, {
         filters: { ...filters, contrast: Number(e.target.value) },
       } as ImageType);
     },
-    [selectedShape?.id],
+    [currentShape, filters],
   );
 
   const handleNoiseChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      const { filters } = canvasState.selectedShape as ImageType;
-      canvasState.updateShape(selectedShape.id, {
+      canvasState.updateShape(currentShape, {
         filters: { ...filters, noise: Number(e.target.value) },
       } as ImageType);
     },
-    [selectedShape?.id],
+    [currentShape, filters],
   );
 
-  if (!selectedShape) {
+  if (!currentShape || currentShape < 0) {
     return null;
   }
 
-  const { blurRadius, brightness, contrast, noise } = selectedShape.filters;
+  const { blurRadius, brightness, contrast, noise } = filters;
 
   return (
     <div className="flex flex-col gap-3">
@@ -154,11 +151,12 @@ function ImageFiltersMenuToolbar() {
       <RangeInput min={0} max={2} step="0.01" label="Noise" onChange={handleNoiseChange} defaultValue={noise ?? 0} />
     </div>
   );
-}
+});
 
 const Toolbar = observer(function ({ className }: { className?: string }) {
   // const tool = toolState.tool;
-  const selectedShape = canvasState.selectedShape;
+  const selectedShape = canvasState.selectedShape();
+
   const openImageToolbar = selectedShape && selectedShape.type === ShapeEnum.IMAGE;
 
   const handleStrokeColorChange = useCallback(

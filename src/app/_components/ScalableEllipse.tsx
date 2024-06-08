@@ -7,18 +7,6 @@ import Konva from 'konva';
 
 const Scalable = dynamic(() => import('./Scalable'), { ssr: false });
 
-interface ScalableEllipseProps {
-  id: number;
-  radiusX: number;
-  radiusY: number;
-  x: number;
-  y: number;
-  fill?: string; // Add this line
-  stroke: string;
-  strokeWidth: number;
-  draggable: boolean;
-}
-
 function ScalableEllipse({ shape, draggable }: { shape: EllipseType; draggable: boolean }) {
   const { id, x, y, fillColor, strokeWidth, strokeColor, radiusX, radiusY } = shape;
   return (

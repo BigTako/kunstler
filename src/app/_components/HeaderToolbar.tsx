@@ -166,17 +166,21 @@ export const HeaderToolbar = observer(function () {
     }
   }, [isElementMenuButtonVisisbe, menuOpened]);
 
-  const handleDuplicateElement = useCallback(() => {
-    canvasState.duplicateSelectedShape();
+  const handleMenuAction = useCallback(() => {
     setSelectedOption('Palm');
+    headerToolbarButtons.find(b => b.title === 'Palm')?.onClick();
     setMenuOpened('');
   }, []);
 
+  const handleDuplicateElement = useCallback(() => {
+    canvasState.duplicateSelectedShape();
+    handleMenuAction();
+  }, [handleMenuAction]);
+
   const handleDeleteElement = useCallback(() => {
     canvasState.removeSelectedShape();
-    setSelectedOption('Palm');
-    setMenuOpened('');
-  }, []);
+    handleMenuAction();
+  }, [handleMenuAction]);
 
   const elementsMenuButtons = useMemo(
     () => [

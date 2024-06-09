@@ -65,6 +65,8 @@ class CanvasState {
     const shape = this.selectedShape() as ShapeType & {
       x: number;
       y: number;
+      heigth: number;
+      width: number;
     };
 
     if (shape) {

@@ -13,6 +13,7 @@ function ScalableRect({ shape, draggable }: { shape: RectType; draggable: boolea
 
   const handleScale = useCallback(
     (node: KonvaShape<KonvaShapeConfig>) => {
+      console.log('handle scale');
       const scaleX = node.scaleX();
       const scaleY = node.scaleY();
       const scaledWidth = Math.max(5, node.width() * scaleX);

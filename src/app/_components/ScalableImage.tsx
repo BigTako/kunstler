@@ -4,9 +4,10 @@ import { observer } from 'mobx-react-lite';
 import useImage from 'use-image';
 import { canvasState } from '@store';
 import Konva from 'konva';
-import { Image, Transformer } from 'react-konva';
+import { Group, Image, Transformer } from 'react-konva';
 import { ImageType } from '@tools';
 import { Filter } from 'konva/lib/Node';
+import { Shape as KonvaShape, ShapeConfig as KonvaShapeConfig } from 'konva/lib/Shape';
 
 const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageType; draggable: boolean }) {
   const { id, x, y, width, height, src, filters } = shape;
@@ -65,6 +66,25 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
     });
   }, []);
 
+  const handleScale = useCallback(
+    (node: KonvaShape<KonvaShapeConfig>) => {
+      console.log('handle scale');
+      const scaleX = node.scaleX();
+      const scaleY = node.scaleY();
+      const scaledWidth = Math.max(5, node.width() * scaleX);
+      const scaledHeight = Math.max(5, node.height() * scaleY);
+      canvasState.updateShape(id, {
+        x: node.x(),
+        y: node.y(),
+        width: scaledWidth,
+        height: scaledHeight,
+      } as ImageType);
+      node.scaleX(1);
+      node.scaleY(1);
+    },
+    [id],
+  );
+
   useEffect(() => {
     handleFilter(Konva.Filters.Grayscale, grayscale);
     handleFilter(Konva.Filters.Invert, invert);
@@ -72,30 +92,39 @@ const ScalableImage = observer(function ({ shape, draggable }: { shape: ImageTyp
 
   return (
     <>
-      <Image
-        alt={`Uploaded image with ${id}`}
-        draggable={draggable}
-        onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
-          canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as ImageType);
+      <Group
+        onTransformEnd={() => {
+          const node = imageRef.current;
+          if (node) {
+            handleScale(node);
+          }
         }}
-        ref={imageRef as LegacyRef<Konva.Image>}
-        x={x}
-        y={y}
-        onClick={() => handleSelect(id)}
-        width={width}
-        height={height}
-        image={image}
-        filters={imageFilters}
-        blurRadius={blurRadius}
-        brightness={brightness}
-        contrast={contrast}
-        noise={noise}
-        pixelSize={pixelate <= 0 ? 0.00001 : pixelate}
-      />
+      >
+        <Image
+          alt={`Uploaded image with ${id}`}
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          image={image}
+          ref={imageRef as LegacyRef<Konva.Image>}
+          draggable={draggable}
+          onDragEnd={(e: Konva.KonvaEventObject<DragEvent>) => {
+            canvasState.updateShape(id, { x: e.target.x(), y: e.target.y() } as ImageType);
+          }}
+          onClick={() => handleSelect(id)}
+          filters={imageFilters}
+          blurRadius={blurRadius}
+          brightness={brightness}
+          contrast={contrast}
+          noise={noise}
+          pixelSize={pixelate <= 0 ? 0.00001 : pixelate}
+        />
+      </Group>
       {isSelected && (
         <Transformer
           ref={trRef as LegacyRef<Konva.Transformer>}
-          flipEnabled={false}
+          flipEnabled={true}
           boundBoxFunc={(oldBox, newBox) => {
             if (Math.abs(newBox.width) < 5 || Math.abs(newBox.height) < 5) {
               return oldBox;

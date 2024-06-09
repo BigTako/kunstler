@@ -11,6 +11,9 @@ const config: Config = {
       'primary-50': '#fafafa',
       'primary-100': '#f4f4f5',
       'primary-200': '#e4e4e7',
+      'primary-600': '#52525b',
+      'primary-700': '#3f3f46',
+      'primary-800': '#27272a',
       'primary-900': '#18181b',
       'primary-950': '#09090b',
       'secondary-100': '#e0e7ff',
@@ -26,11 +29,6 @@ const config: Config = {
       boxShadow: {
         sm: '3px 2px 15px rgba(0,0,0,0.2)',
       },
-      // backgroundImage: {
-      //   "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-      //   "gradient-conic":
-      //     "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      // },
     },
   },
   plugins: [],

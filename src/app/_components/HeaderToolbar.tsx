@@ -103,6 +103,25 @@ const headerToolbarButtons = [
   },
 ];
 
+function ElementMenu({ onDelete, onDuplicate }: { onDelete: () => void; onDuplicate: () => void }) {
+  return (
+    <div className="flex flex-col justify-start rounded-lg bg-primary-50 p-1 shadow-sm">
+      <button
+        className="flex items-center gap-2 rounded-lg p-2 text-start text-primary-900 transition-colors hover:bg-secondary-100 active:bg-secondary-200"
+        onClick={onDuplicate}
+      >
+        Duplicate element
+      </button>
+      <button
+        className="rounded-lg p-2 text-start text-red-700 transition-colors hover:bg-red-100 active:bg-red-200"
+        onClick={onDelete}
+      >
+        Delete element
+      </button>
+    </div>
+  );
+}
+
 export const HeaderToolbar = observer(function () {
   const [selectedOption, setSelectedOption] = useState('Brush');
 
@@ -113,6 +132,12 @@ export const HeaderToolbar = observer(function () {
   }, []);
 
   const isElementMenuButtonVisisbe = canvasState.selectedShapeId !== -1;
+
+  useEffect(() => {
+    if (!isElementMenuButtonVisisbe) {
+      setIsElementMenuOpenened(false);
+    }
+  }, [isElementMenuButtonVisisbe]);
 
   const handleDuplicateElement = useCallback(() => {
     canvasState.duplicateSelectedShape();
@@ -167,22 +192,7 @@ export const HeaderToolbar = observer(function () {
           </SquareButton>
         )}
       </div>
-      {isElementMenuOpenened && (
-        <div className="flex flex-col justify-start rounded-lg bg-primary-50 p-1 shadow-sm">
-          <button
-            className="flex items-center gap-2 rounded-lg p-2 text-start text-primary-900 transition-colors hover:bg-secondary-100 active:bg-secondary-200"
-            onClick={handleDuplicateElement}
-          >
-            Duplicate element
-          </button>
-          <button
-            className="rounded-lg p-2 text-start text-red-700 transition-colors hover:bg-red-100 active:bg-red-200"
-            onClick={handleDeleteElement}
-          >
-            Delete element
-          </button>
-        </div>
-      )}
+      {isElementMenuOpenened && <ElementMenu onDelete={handleDeleteElement} onDuplicate={handleDuplicateElement} />}
     </header>
   );
 });
